@@ -1,0 +1,10 @@
+main.c 
+	huffman.h 								-> contient les structure de données utilisées
+
+	compression.c 							-> contient la fonction qui comrpesse un fichier
+		compression_fonction.c 				-> contient les fonctions de compression detaillées dans  le fichier plan
+			utilitaire_compression.c  		-> contient les fonctions bas niveau utilisées par decomrpession_fonction.c
+
+	decompression.c 						-> contient la fonction qui decompresse un fichier
+		decompression_fonction.c 			-> contient les fonctions de decompression detaillées dans  le fichier plan
+			utilitaire_decompression.c 		-> contient les fonctions bas niveau utilisées par decomrpession_fonction.c
