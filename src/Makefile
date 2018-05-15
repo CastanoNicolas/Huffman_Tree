@@ -15,7 +15,7 @@ LDFLAGS=
 $(EXEC): $(SRCS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-%.o: %.c $(HDR_FOLDER)%.h
+%.o: %.c $(HDR_FOLDER)%.h $(HDR_FOLDER)huffman.h
 	$(CC) -o $(OBJ_FOLDER)$@ -c $< $(CFLAGS)
 
 clean:
