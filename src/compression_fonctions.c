@@ -13,7 +13,7 @@
  **/
 
 /*  ETAPES
-1- Parcourir l'arbre original pour construire un tableau avec tous les caracteres et leur longeur
+1- Parcourir l'arbre original pour construire un tableau avec tous les caracteres et leur longueur
 2- Trier le tableau dans l'ordre alphabetique pour chaque niveau
 3- Construire l'arbre de Huffman a partir de ce tableau
 
@@ -34,9 +34,13 @@ canonical_tree* normal_tree_to_canonical_tree (huffman_tree* tree){
 		construction_par_niveau(tree, i, i, p_indice, tab);
 	}
 
+    tri_tableau(tab, nbf);
+
     int nbf_level = 0;
-    canonical_tree* can_tree = malloc(sizeof(noeud));
-    can_tree->pere = NULL;
+    canonical_tree* can_tree = malloc(sizeof(noeud)); //malloc la racine
+    can_tree->pere = NULL; 
+    noeud* n;
+    n = can_tree; //n = racine
 
     if (d == 0){
         can_tree->caractere = tab[0].caractere;
@@ -44,21 +48,27 @@ canonical_tree* normal_tree_to_canonical_tree (huffman_tree* tree){
         can_tree->fils_gauche = NULL;
     }
     else {
-        while (){
+        int inf = 0;
+        int sup = 0;
+        int longueur;
+        int level;
 
+        i = 0;
+        while (i < nbf){
+            longueur = tab[inf].longueur;
+            level = 1;
             
-        
-            can_tree->fils_droite = malloc(sizeof(noeud));
-            can_tree->fils_droite->pere = can_tree;
-            can_tree->fils_gauche = malloc(sizeof(noeud));
-            can_tree->fils_gauche->pere = can_tree;
+            while(longueur == tab[sup].longueur)
+                sup++;
 
+            nbf_level = sup - inf;
+
+            n->fils_gauche = malloc(sizeof(noeud));
+            n->fils_gauche->pere = n;            
+            n->fils_droite = malloc(sizeof(noeud));
+            n->fils_droite->pere = n;
 
         }
     }
 
-    
-
-    
-    
 }

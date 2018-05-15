@@ -24,7 +24,7 @@ int tree_depth(huffman_tree *a)
     return (1 + max(tree_depth(a->fils_gauche), tree_depth(a->fils_droite)));
 }
 
-void construction_par_niveau(huffman_tree *tree, int level, int longeur,
+void construction_par_niveau(huffman_tree *tree, int level, int longueur,
                              int *p_indice, tableau_constructif *tab)
 {
     if (tree == NULL)
@@ -35,15 +35,15 @@ void construction_par_niveau(huffman_tree *tree, int level, int longeur,
         if (tree->fils_gauche == NULL && tree->fils_droite == NULL)
         {
             tab[*p_indice].caractere = tree->caractere;
-            tab[*p_indice].longeur = longeur;
+            tab[*p_indice].longueur = longueur;
             (*p_indice)++;
         }
     }
 
     else if (level > 0)
     {
-        construction_par_niveau(tree->fils_gauche, level - 1, longeur, p_indice, tab);
-        construction_par_niveau(tree->fils_droite, level - 1, longeur, p_indice, tab);
+        construction_par_niveau(tree->fils_gauche, level - 1, longueur, p_indice, tab);
+        construction_par_niveau(tree->fils_droite, level - 1, longueur, p_indice, tab);
     }
 }
 
@@ -53,12 +53,12 @@ void tri_tableau(tableau_constructif *tab, int nbf)
     int temp;
     int inf = 0;
     int sup = 0;
-    int longeur;
+    int longueur;
 
     while (sup < nbf)
     {
-        longeur = tab[inf].longeur;
-        while (longeur == tab[sup].longeur)
+        longueur = tab[inf].longueur;
+        while (longueur == tab[sup].longueur)
             sup++;
 
         while (inf < sup)
