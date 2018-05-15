@@ -10,9 +10,11 @@
 * Aucun traitement sur l'entrée lue
 **/
 int lire_symbole(FILE* f){
-	int c;
-	fscanf("%c", &c);
-	return c;
+	char c;
+	if (fscanf(f, "%c", &c)){
+		return (int)c;
+	}
+	else return -1;
 }
 
 /**
@@ -29,7 +31,7 @@ char encoder_symbole(tree* tree, char symbole, int* lg){
 	*lg =0;
 
 	//parcours de l'arbre en recherchant sym
-	n=parcours_arbre(tree,symbole);
+	n=recherche_symbole_arbre(tree,symbole);
 
 	//ecriture du code de sym
 	//tant qu'on ne pointe pas sur la tete, c'est à dire qu'on a fini de remonter l'arbre
@@ -55,7 +57,7 @@ char encoder_symbole(tree* tree, char symbole, int* lg){
 renvoit NULL si le symbole n'est pas trouvé
 * renvoit le noeud correspondant au symbole
 **/
-noeud* parcours_arbre(tree* tree, char symbole){
+noeud* recherche_symbole_arbre(tree* tree, char symbole){
 	noeud* n;
 
 	//si on arrive en fin d'arbre
@@ -68,10 +70,17 @@ noeud* parcours_arbre(tree* tree, char symbole){
 		return tree;
 	}
 	//sinon on parcours le fils droit pour le trouver
-	else if(n = parcours_arbre(tree->fils_droit, symbole) != NULL){
+	else if(n = recherche_symbole_arbre(tree->fils_droit, symbole) != NULL){
 		return n;
 	}
 	//et si il n'est pas dans le fils droit on parcours le fils gauche
-	else return parcours_arbre(tree->fils_gauche, symbole);
+	else return recherche_symbole_arbre(tree->fils_gauche, symbole);
 
+}
+
+/**
+* écrit dans un fichier un octet codé stocké dans chaine
+**/ 
+void ecrire_octet(FILE* fichier_ecriture, char chaine){
+	fprintf(fichier_ecriture, "%c", chaine);
 }
