@@ -23,6 +23,7 @@
  * retourne le tableau frequence.
  */
 int* frequencies_of_occurences(char* file_name, int symbole_number);
+FAIT
 
 
 
@@ -35,6 +36,7 @@ int* frequencies_of_occurences(char* file_name, int symbole_number);
  * construit et store dans une structure de donnée (malloc) l'arbre résultat
  **/
 huffman_tree* build_huffman_tree(int* frequencies);
+FAIT
 
 
 
@@ -66,6 +68,7 @@ canonical_tree* normal_tree_to_canonical_tree(huffman* tree);
  * le format d'écriture doit etre reflechi (potentiellement avec le groupe)
  **/
 void write_compressed_huffman_code(char* dst_file_name,canonical_tree* tree);
+FAIT
 
 
 
@@ -86,6 +89,7 @@ void write_compressed_huffman_code(char* dst_file_name,canonical_tree* tree);
  * Tout les fichiers sont fermé a la fin de la fonction.
  **/
 void write_compressed_file(char* src_file_name, char* dst_file_name, canonical_tree* tree);
+FAIT
 
 
 
@@ -101,6 +105,7 @@ void write_compressed_file(char* src_file_name, char* dst_file_name, canonical_t
  * Le fichier est fermé a la fin du traitement.
  **/
 length_table* read_compressed_huffman_code(char* src_file_name);
+FAIT
 
 
 
@@ -130,6 +135,7 @@ canonical_tree* length_table_to_canonical_tree(length_table* table);
  *		arrivée sur feuille : émission symbole + retour à la racine
  **/
 void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, canonical_tree* tree);
+ENCOURS
 
 
 

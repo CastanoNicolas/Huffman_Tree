@@ -20,3 +20,4 @@ $(EXEC): $(SRCS)
 
 clean:
 	@rm -rf $(OBJ_FOLDER)*.o $(EXEC)
+

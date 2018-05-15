@@ -1,6 +1,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+
+char* read_compressed_huffman_code(char* src_file_name) {
+  FILE* f = fopen(src_file_name, "r");
+
+  if (f == NULL) {
+    printf("Erreur lors de l'ouverture du fichier compressé.\n");
+    exit(1);
+  }
+
+  char* tab = malloc(sizeof(char) * 256);
+
+  for (int i = 0; i < 256; i++) {
+    fscanf(f, "%c", &tab[i]);
+  }
+
+  return tab;
+}
+
 void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, canonical_tree* tree){
 
 	FILE* fsrc = fopen(src_file_name,"r");
