@@ -63,13 +63,15 @@ noeud* parcours_arbre(tree* tree, char symbole){
 		return NULL;
 	}
 
-	//
+	//si on a trouvé le charactère
 	if(tree->caractere == symbole){
 		return tree;
 	}
+	//sinon on parcours le fils droit pour le trouver
 	else if(n = parcours_arbre(tree->fils_droit, symbole) != NULL){
 		return n;
 	}
+	//et si il n'est pas dans le fils droit on parcours le fils gauche
 	else return parcours_arbre(tree->fils_gauche, symbole);
 
 }
