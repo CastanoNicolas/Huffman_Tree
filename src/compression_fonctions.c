@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "huffman.h"
-#include "utilitaire_compression.c"
+#include "utilitaire_compression.h"
 
 void write_compressed_huffman_code(char* dst_file_name, canonical_tree* tree) {
   FILE* f = fopen(dst_file_name, "w");

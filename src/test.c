@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../header/compression_fonctions.h"
-#include "../header/decompression_fonction.h"
+#include "compression_fonctions.h"
+#include "decompression_fonction.h"
+
 
 int main(){
 
