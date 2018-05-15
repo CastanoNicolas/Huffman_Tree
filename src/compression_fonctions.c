@@ -49,7 +49,7 @@ int* frequencies_of_occurences(char* file_name, int symbole_number)
 	        do
 	        {
 	            char lecture = lire_symbole(fichier); // Appel fonction
-	            tab[lecture]++;
+	            tab[lecture]++;	// Compter les occurences
 	        } while (feof(fichier)==0); // tant qu'on est pas à la fin du fichier
 		    
 		    fclose(fichier); // Fermeture du fichier
