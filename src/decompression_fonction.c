@@ -1,5 +1,7 @@
 #include <stdio.h>
-#include "../header/decompression_fonction.h"
+#include <stdlib.h>
+
+#include "decompression_fonction.h"
 
 char* read_compressed_huffman_code(char* src_file_name) {
   FILE* f = fopen(src_file_name, "r");
@@ -12,6 +14,8 @@ char* read_compressed_huffman_code(char* src_file_name) {
   char* tab = malloc(sizeof(char) * 256);
 
   for (int i = 0; i < 256; i++) {
-    fscanf(f, "%c", tab[i]);
+    fscanf(f, "%c", &tab[i]);
   }
+
+  return tab;
 }

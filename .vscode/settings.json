@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "decompression_fonction.h": "c",
+        "utilitaire_compression.h": "c"
+    }
+}

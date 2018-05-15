@@ -1,5 +1,7 @@
 #include <stdio.h>
-#include "../header/utilitaire_compression.h"
+#include <stdlib.h>
+#include "huffman.h"
+#include "utilitaire_compression.h"
 
 void parcours_arbre(canonical_tree* tree, char* tableau, int profondeur) {
   if (tree == NULL) {
