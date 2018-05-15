@@ -3,7 +3,7 @@
 
 typedef struct n { 
 	float poid ; 
-  int caractere ;
+    int caractere ;
 	noeud* fils_gauche ; 
 	noeud* fils_droite ; 
 	noeud* pere ; 
