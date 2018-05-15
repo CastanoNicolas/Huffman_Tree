@@ -1,0 +1,3 @@
+#ifndef COMPRESSION_FUN
+#define COMPRESSION_FUN
+#endif

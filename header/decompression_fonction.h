@@ -1,0 +1,3 @@
+#ifndef DECOMPRESSION_FUN
+#define DECOMPRESSION_FUN
+#endif
