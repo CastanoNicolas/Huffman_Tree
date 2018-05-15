@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#define ASCII 255
 
 
 char* read_compressed_huffman_code(char* src_file_name) {
@@ -18,6 +18,10 @@ char* read_compressed_huffman_code(char* src_file_name) {
   }
 
   return tab;
+}
+
+canonical_tree* length_table_to_canonical_tree(length_table* table){
+	return NULL;
 }
 
 void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, canonical_tree* tree){
@@ -80,4 +84,39 @@ void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, ca
 	close(fsrc);
 	close(fdst);
 	return;
+}
+
+
+/**
+* Décompresse un fichier modifié avec la methode Move to Front
+* le tableau initial (dictionnaire) doit être le même que celui donné à la fonction de compression
+**/
+void move_to_front_decompression(FILE* fichier_lecture, FILE* fichier_ecriture){
+	int indice;
+	char dictionnaire[ASCII];
+	int tmp;
+
+	init_dictionnaire(dictionnaire);
+
+	//on lit le symbole une première fois
+	indice = lire_symbole(fichier_lecture);
+
+	while(!(feof(fichier_lecture))){
+
+		//on ecrit le symbole correspondant à l'indice dans le fichier de sortie
+		tmp = dictionnaire[indice];
+		ecrire_octet(fichier_ecriture,tmp);
+
+		//on decale le tableau pour mettre à jour la frequence des derniers caractères lu
+		if(indice!=0){
+			for(int j=indice ; j >= 1 ; j--){
+				dictionnaire[j]=dictionnaire[j-1];
+			}
+			dictionnaire[0]=tmp;
+		}
+
+		//on traite le symbole suivant
+		indice = lire_symbole(fichier_lecture);
+	}
+
 }

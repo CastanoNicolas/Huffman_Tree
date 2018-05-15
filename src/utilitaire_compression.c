@@ -106,12 +106,12 @@ char* tree_to_length_table(canonical_tree* tree) {
 	for (int i = 0; i < 256; i++) {
 		table[i] = 0;
 	}
+}
 
 /* QUENTIN */
 
 
-void tricroissant( int** tab, int tab_size)
-{
+void tricroissant( int** tab, int tab_size){
   int i=0;
   int tmp0=0;
   int tmp1=0;
