@@ -27,32 +27,34 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
 
   char octet = 0;
   char buffer;
-  int cmp = 7;
+  int cmp = 0;
   int lg;
 
   while (c != EOF) {
     buffer = encoder_symbole(tree, c, &lg);
-    if (cmp - lg + 1 > 0) {
-      octet = octet << (cmp - lg + 1) | buffer;
-      cmp = cmp - lg + 1;
-    } else if (cmp-lg+1==0) {
-        octet = octet | buffer;
-        ecrire_symbole(dst,octet);
-        cmp = 7;
-    }
-    else{
-        char temp= buffer;
-        temp = temp >> lg-cmp;
-        octet = octet|temp;
-        ecrire_symbole(dst,octet);
-        octet = 0;
-        octet = octet | (buffer << 8-cmp);
-        cmp = lg-cmp
+    if (cmp + lg > 8) {
+      octet = (octet << lg) | buffer;
+      cmp = cmp + lg;
+    } else if (cmp + lg == 8) {
+      octet = (octet<<lg) | buffer;
+      ecrire_symbole(dst, octet);
+      octet = 0;
+      cmp = 0;
+    } else {
+      char temp = buffer;
+      temp = temp >> (lg - (8-cmp));
+      octet = (octet<<(lg - (8-cmp))) | temp;
+      ecrire_symbole(dst, octet);
+      octet = (buffer << cmp) >> cmp;
+      cmp = 8 - cmp;
     }
     c = lire_symbole(src);
   }
-}
 
-fclose(src);
-fclose(dst);
+  if (!cmp) {
+    ecrire_symbole(dst, octet);
+  }
+
+  fclose(src);
+  fclose(dst);
 }
