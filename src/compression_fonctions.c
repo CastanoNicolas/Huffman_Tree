@@ -37,12 +37,12 @@ int* frequencies_of_occurences(char* file_name){
 	    fichier = fopen(file_name, "r"); // ouverture en lecture
 	    if (fichier != NULL)
 	    {
-	        do
-	        {
-	            char lecture = lire_symbole(fichier); // Appel fonction
-	            tab[(int)lecture]++;
-	        } while (feof(fichier)==0); // tant qu'on est pas à la fin du fichier
-
+	        
+	        char lecture = lire_symbole(fichier); // Appel fonction
+	        while (feof(fichier)==0){ // tant qu'on est pas à la fin du fichier
+            tab[(int)lecture]++;
+            lecture = lire_symbole(fichier); // Appel fonction
+          }
 		    fclose(fichier); // Fermeture du fichier
 		    return tab;
 	    }
@@ -124,7 +124,7 @@ huffman_tree* build_huffman_tree(int* frequencies){
     tricroissantNoeud(tabNoeud,nbCara);                                         //on tri le nouveau tableau
   }
 
-  return tete;
+  return tete;                                                                  //on retourne la tete de l'arbre soit l'arbre en entier car les noeuds sont liés entre eux
 
 }
 
