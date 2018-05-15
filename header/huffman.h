@@ -2,10 +2,10 @@
 #define HUFFMAN
 
 
-#define NBSYMBOLE 256
+#define TAILLE_TAB 256
 
 typedef struct n {
-	float poid ;
+	int poid ;
   int caractere ;
 	struct n* fils_gauche ;
 	struct n* fils_droite ;
