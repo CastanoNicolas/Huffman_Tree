@@ -220,10 +220,10 @@ if(nbCara > 1){
 }
 
 else{                                                                           //dans le cas où on a un seul caractere
-  tete->poid = tabNoeud[0]->poid;                                                //on défini son poid comme la somme des 2 plus faibles
-  tete->caractere = tabNoeud[0]->caractere;                                     //son caractere vaut -1 car il n'est pas exploitable comme caractere
-  tete->fils_gauche = NULL;                                                     //son fils_gauche est le fils le plus bas
-  tete->fils_droite = NULL;                                                     //son fils droit est l'autre fils un peu supérieur
+  tete->poid = tabNoeud[0]->poid;                                                //on défini son poid comme le poid de l'unique
+  tete->caractere = tabNoeud[0]->caractere;                                     //son caractere vaut celui de l'unique caractere
+  tete->fils_gauche = NULL;                                                     //son fils_gauche est NULL
+  tete->fils_droite = NULL;                                                     //son fils droit est NULL
   tete->pere = NULL;                                                             //il n'a pas de pere
 }
   return tete;                                                                  //on retourne la tete de l'arbre soit l'arbre en entier car les noeuds sont liés entre eux
