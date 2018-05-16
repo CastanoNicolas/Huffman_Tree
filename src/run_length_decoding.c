@@ -18,12 +18,12 @@ void run_length_decoding(char *file_name)
     fichier = fopen(file_name, "r"); // ouverture en lecture
 	fichier_bis=fopen("rld.txt","w");
 	int convert_int;
-
 	int occurence =1;
     char prec,courant,courant1,courant2;
 
-    if(fichier_bis == NULL){
-    	printf("Probleme");
+    if(fichier_bis == NULL)
+    {
+    	printf("Probleme sur rld.txt");
     	return;
     }
 	
@@ -34,30 +34,22 @@ void run_length_decoding(char *file_name)
 		courant=lire_symbole(fichier);
 		convert_int= prec - '0';
 
-
 		while(!(feof(fichier)))
 		{		
 			for(int i=0; i<convert_int; i++)
 			{
 				fprintf(fichier_bis,"%c",courant);
 			}
-			
-
-			printf("PREC %c\n", prec);
-			printf("COURANT %c\n", courant);
-			printf("EN ENTIER: %d\n", convert_int);
 
 			prec=lire_symbole(fichier);
 			courant=lire_symbole(fichier);
 			convert_int= prec - '0';			
 		}
 	}
-	else printf("Probleme lecture fichier");
-	
+	else printf("Probleme lecture fichier");	
 }
 
 int main()
 {
-run_length_decoding("rle.txt");
-
+	run_length_decoding("rle.txt");
 }

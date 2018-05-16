@@ -22,7 +22,8 @@ void run_length_encoding(char *file_name)
     char courant;
     char prec;
 
-    if(fichier_bis == NULL){
+    if(fichier_bis == NULL)
+    {
     	printf("Probleme");
     	return;
     }
@@ -36,7 +37,6 @@ void run_length_encoding(char *file_name)
 
 		while(!(feof(fichier)))
 		{
-			
 			if(prec!=courant)
 			{
 				fprintf(fichier_bis,"1%c",prec);
@@ -52,14 +52,13 @@ void run_length_encoding(char *file_name)
 				occurence=1;
 			}
 			prec=courant;
-			if(!(feof(fichier))){
+			if(!(feof(fichier)))
+			{
 				courant = lire_symbole(fichier);
 			}
-			
 		}
 	}
 	else printf("Probleme lecture fichier");
-	
 }
 
 
@@ -67,5 +66,4 @@ void run_length_encoding(char *file_name)
 int main()
 {
 run_length_encoding("test");
-
 }
