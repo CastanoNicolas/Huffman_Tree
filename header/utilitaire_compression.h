@@ -9,12 +9,6 @@ void ecrire_symbole(FILE* f,char c);
 char encoder_symbole(canonical_tree* tree, char symbole, int* lg);
 void afficher_arbre (noeud* tete, int niveau);
 
-/**
-* lire_symbole : lit un charactère (8bits) dans le fichier source
-* renvoit un int, pour prendre en compte la valeur EOF (-1)
-* Aucun traitement sur l'entrée lue
-**/
-int lire_symbole(FILE* f);
 
 /**
 * encoder_symbole : renvoit le code d'un symbole (char ascii) dans un arbre quelconque

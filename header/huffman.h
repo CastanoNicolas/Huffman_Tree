@@ -1,6 +1,8 @@
 #ifndef HUFFMAN
 #define HUFFMAN
 
+#define TAILLE_TAB 256
+
 typedef struct n { 
 	int poid ; 
 	int caractere ;
