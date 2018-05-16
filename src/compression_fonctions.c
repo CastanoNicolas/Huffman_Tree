@@ -16,7 +16,7 @@
 **/
 void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture){
   int symbole;
-  char dictionnaire[ASCII];
+  char dictionnaire[TAILLE_TAB];
   int i=0;
 
   init_dictionnaire(dictionnaire);
@@ -27,7 +27,7 @@ void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture){
   while(!(feof(fichier_lecture))){
     //on recherche l'indice correspondant au symbole
     printf("%d ",symbole);
-    while (dictionnaire[i] != (char)symbole && i < ASCII){  
+    while (dictionnaire[i] != (char)symbole && i < TAILLE_TAB){  
       i++;
     }
 

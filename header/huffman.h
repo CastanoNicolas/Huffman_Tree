@@ -10,6 +10,6 @@ typedef struct n {
 	struct n* fils_droite ; 
 	struct n* pere ; 
 
-} noeud, huffman_tree, canonical_tree;
+} noeud, huffman_tree, canonical_tree,tree;
 
 #endif
