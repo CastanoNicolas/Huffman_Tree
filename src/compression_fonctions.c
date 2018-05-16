@@ -350,44 +350,44 @@ void write_compressed_huffman_code(FILE* dst_file, canonical_tree* tree) {
 }
 
 void write_compressed_file(char* src_file_name, char* dst_file_name,
- canonical_tree* tree) {
+                           canonical_tree* tree) {
   FILE* src = fopen(src_file_name, "r");
   FILE* dst = fopen(dst_file_name, "w");
-
+  fprintf(dst, "%c", 0);
   write_compressed_huffman_code(dst, tree);
-
   char c = lire_symbole(src);
-
   char octet = 0;
-  char buffer;
+  char* buffer;
   int cmp = 0;
+  unsigned int nb_bits = 0;
   int lg;
-
-  while (c != EOF) {
+  while (!feof(src)) {
     buffer = encoder_symbole(tree, c, &lg);
-    if (cmp + lg > 8) {
-      octet = (octet << lg) | buffer;
-      cmp = cmp + lg;
-    } else if (cmp + lg == 8) {
-      octet = (octet<<lg) | buffer;
-      ecrire_octet(dst, octet);
-      octet = 0;
-      cmp = 0;
+    if (lg <= 8) {
+      nb_bits += traitement_caractere(&cmp, lg, &octet, buffer, dst);
     } else {
-      char temp = buffer;
-      temp = temp >> (lg - (8-cmp));
-      octet = (octet<<(lg - (8-cmp))) | temp;
-      ecrire_octet(dst, octet);
-      octet = (buffer << cmp) >> cmp;
-      cmp = 8 - cmp;
+      int nb_octet = lg / 8;
+      if (lg % 8 == 0) {
+        nb_bits += traitement_caractere(&cmp, 8, &octet, &buffer[0], dst);
+      } else {
+        nb_bits += traitement_caractere(&cmp, lg % 8, &octet, &buffer[0], dst);
+      }
+      int i = 1;
+      while (i < nb_octet) {
+        nb_bits += traitement_caractere(&cmp, 8, &octet, &buffer[i], dst);
+        i++;
+      }
     }
     c = lire_symbole(src);
   }
-
-  if (!cmp) {
-    ecrire_octet(dst, octet);
+  if (cmp) {
+    octet = octet << (8 - cmp);
+    ecrire_symbole(dst, octet);
+    nb_bits += cmp;
   }
-
+  nb_bits = nb_bits % 8;
+  rewind(dst);
+  fprintf(dst, "%c", nb_bits);
   fclose(src);
   fclose(dst);
 }
