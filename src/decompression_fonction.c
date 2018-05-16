@@ -106,8 +106,7 @@ void run_length_decoding(char *file_name)
 	fichier_bis=fopen("rld.txt","w");
 	int convert_int;
 
-	int occurence =1;
-    char prec,courant,courant1,courant2;
+    char prec,courant;
 
     if(fichier_bis == NULL){
     	printf("Probleme");

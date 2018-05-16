@@ -245,6 +245,7 @@ canonical_tree *normal_tree_to_canonical_tree(huffman_tree *tree)
     int *p_indice;
     p_indice = &indice;
 
+    // construction du tableau de longueur
     for (; i <= d; i++)
     {
         construction_par_niveau(tree, i, i, p_indice, tab);
