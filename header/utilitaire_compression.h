@@ -34,10 +34,6 @@ noeud* recherche_symbole_arbre(tree* tree, char symbole);
 
 
 /* Ergi */
-typedef struct {
-    int caractere;
-    int longueur;
-} tableau_constructif;
 
 int nb_feuilles (huffman_tree* tree);
 

@@ -185,26 +185,7 @@ void afficher_arbre (noeud* tete, int niveau) {
 /* NICOLAS */
 
 /* Ergi */
-int nb_feuilles(huffman_tree *tree)
-{
-    if (tree == NULL)
-        return 0;
 
-    if (tree->fils_gauche == NULL && tree->fils_droite == NULL)
-        return 1;
-
-    else
-        return (nb_feuilles(tree->fils_gauche) + nb_feuilles(tree->fils_droite));
-}
-
-/* racine a profondeur 0 */
-int tree_depth(huffman_tree *a)
-{
-    if (a == NULL)
-        return -1;
-
-    return (1 + max(tree_depth(a->fils_gauche), tree_depth(a->fils_droite)));
-}
 
 void construction_par_niveau(huffman_tree *tree, int level, int longueur,
                              int *p_indice, tableau_constructif *tab)
