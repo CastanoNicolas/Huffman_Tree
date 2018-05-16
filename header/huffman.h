@@ -1,12 +1,20 @@
 #ifndef HUFFMAN
 #define HUFFMAN
 
+#define TAILLE_TAB 256
+
 typedef struct n { 
-	float poid ; 
-    int caractere ;
-	noeud* fils_gauche ; 
-	noeud* fils_droite ; 
-	noeud* pere ; 
-} noeud, huffman_tree, canonical_tree;
+	int poid ; 
+	int caractere ;
+	struct n* fils_gauche ; 
+	struct n* fils_droite ; 
+	struct n* pere ; 
+
+} noeud, huffman_tree, canonical_tree,tree;
+
+typedef struct {
+    int caractere;
+    int longueur;
+} tableau_constructif;
 
 #endif
