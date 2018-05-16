@@ -1,7 +1,8 @@
-#include "utilitaire_compression.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "functions.h"
+#include "utilitaire_compression.h"
 #include "huffman.h"
 
 /* JULIETTE */
@@ -11,11 +12,11 @@
  *dans l'ordre Le pointeur sur entier lg contient la longueur (en nombre de bit)
  *du symbole codé. Attention : Le resultat peut donc etre plus court qu'un
  *octet. Convention : le poid d'un fils_gauche est mis à 0 et celui d'un
- *fils_droit à 1.
+ *fils_droite à 1.
  **/
 char* encoder_symbole(tree* tree, char symbole, int* lg) {
   noeud* n;
-  char res[32];
+  char *res = malloc(32);
 
   int i = 0;
   int j = 0;
@@ -45,7 +46,7 @@ char* encoder_symbole(tree* tree, char symbole, int* lg) {
   while (n != tree) {
     assert(i >= 0 && j >= 0 && j < 8);
     // si la branche vaut 1 (fils droit)
-    if (n == n->parent->fils_droit) {
+    if (n == n->pere->fils_droite) {
       res[i] += 1 << j;  // on ecrit 1 (bit) décallé en fonction de la
                          // profondeur
     }
@@ -53,7 +54,7 @@ char* encoder_symbole(tree* tree, char symbole, int* lg) {
     // si la branche vaut 0  (fils gauche) decalage inutile
 
     // on incremente
-    n = n->parent;
+    n = n->pere;
     // longueur du code du symbole restant à ecrire
     j++;
 
@@ -64,7 +65,7 @@ char* encoder_symbole(tree* tree, char symbole, int* lg) {
     }
   }
 
-  return (char*)res;
+  return res;
 }
 
 /**
@@ -86,14 +87,14 @@ noeud* recherche_symbole_arbre(tree* tree, char symbole, int* profondeur) {
     return tree;
   }
   // sinon on parcours le fils droit pour le trouver
-  else if (n = recherche_symbole_arbre(tree->fils_droit, symbole) != NULL) {
+  else if ((n = recherche_symbole_arbre(tree->fils_droite, symbole,profondeur)) != NULL) {
     (*profondeur)++;
     return n;
   }
   // et si il n'est pas dans le fils droit on parcours le fils gauche
   else {
     (*profondeur)++;
-    return recherche_symbole_arbre(tree->fils_gauche, symbole);
+    return recherche_symbole_arbre(tree->fils_gauche, symbole,profondeur);
   }
 }
 
@@ -260,14 +261,14 @@ int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,
     return lg;
   } else if (*cmp + lg == 8) {
     *octet = (*octet << lg) | (*buffer);
-    ecrire_symbole(dst, *octet);
+    ecrire_octet(dst, *octet);
     *octet = 0;
     *cmp = 0;
     return lg;
   } else {
     char temp = *buffer;
     *octet = (*octet << (8 - *cmp)) | (temp >> (8 - *cmp));
-    ecrire_symbole(dst, *octet);
+    ecrire_octet(dst, *octet);
     *octet = (*buffer << *cmp) >> *cmp;
     *cmp = lg - (8 - *cmp);
     return *cmp;

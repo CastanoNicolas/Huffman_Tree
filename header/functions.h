@@ -1,5 +1,6 @@
 #ifndef FUNCTIONS_ADD
 #define FUNCTIONS_ADD
+#include "huffman.h"
 
 void init_dictionnaire(char* dictionnaire);
 int max( int a , int b);

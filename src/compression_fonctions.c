@@ -382,7 +382,7 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
   }
   if (cmp) {
     octet = octet << (8 - cmp);
-    ecrire_symbole(dst, octet);
+    ecrire_octet(dst, octet);
     nb_bits += cmp;
   }
   nb_bits = nb_bits % 8;
