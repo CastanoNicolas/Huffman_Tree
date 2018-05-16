@@ -25,10 +25,18 @@ int lire_symbole(FILE* f){
 * Attention : Le resultat peut donc etre plus court qu'un octet.
 * Convention : le poid d'un fils_gauche est mis à 0 et celui d'un fils_droit à 1. 
 **/
-char encoder_symbole(tree* tree, char symbole, int* lg){
+char* encoder_symbole(tree* tree, char symbole, int* lg){
 	noeud *n;
-	int res;
+	char res[32];
+	int i=0;
+	int j=0;
+	
 	*lg =0;
+
+	//on initialise le tableau
+	for(int k=0; k<32; k++){
+		res[k]=0;
+	}
 
 	//parcours de l'arbre en recherchant sym
 	n=recherche_symbole_arbre(tree,symbole);
@@ -38,16 +46,21 @@ char encoder_symbole(tree* tree, char symbole, int* lg){
 	while ( n != tree ){
 		//si la branche vaut 1 (fils droit)
 		if (n == n->parent->fils_droit)
-			res +=  1 << (*lg); //on ecrit 1 (bit) décallé en fonction de la profondeur 
-		//si la branche vaut 0  (fils gauche)
-		else res += 0 << (*lg); //on ecrit 0 (bit) décallé en fonction de la profondeur 
+			res[i] +=  1 << j; //on ecrit 1 (bit) décallé en fonction de la profondeur 
+		//si la branche vaut 0  (fils gauche) decalage inutile
 
 		//on incremente
 		n = n->parent;
 		(*lg)++;
+		j++;
+		//si on commence un nouvel octet
+		if((*lg) != 0 && (*lg)%8 == 0){
+			i++;
+			j=0;
+		}
 	}
 
-	return (char)res;
+	return (char*)res;
 
 }
 
