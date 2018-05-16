@@ -35,7 +35,7 @@ void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, ca
 	char c, c_ascii;
 	canonical_tree* t=tree;
 	int i =0;
-	do(){
+	do{
 		t=tree;
 		fscanf(fsrc,"%c",&c);
 

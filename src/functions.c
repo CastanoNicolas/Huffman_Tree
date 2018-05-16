@@ -8,7 +8,11 @@
 **/
 void init_dictionnaire(char* dictionnaire){
 
-  for(int i=0; i<ASCII ; i++){
+  for(int i=0; i<TAILLE_TAB ; i++){
     dictionnaire[i]=(char)i;
   }
+}
+
+int max( int a , int b){
+  return (a>b)?a:b;
 }

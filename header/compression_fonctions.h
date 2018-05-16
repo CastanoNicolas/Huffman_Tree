@@ -1,6 +1,8 @@
 #ifndef COMPRESSION_FUN
 #define COMPRESSION_FUN
 
+#include "huffman.h"
+
 /**
 * implemente la methode de compression Move to Front
 * compare octet par octet, en suivant la table ascii

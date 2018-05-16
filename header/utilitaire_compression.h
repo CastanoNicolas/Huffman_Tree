@@ -9,6 +9,10 @@ void ecrire_symbole(FILE* f,char c);
 char encoder_symbole(canonical_tree* tree, char symbole, int* lg);
 void afficher_arbre (noeud* tete, int niveau);
 
+void tricroissant( int** tab, int tab_size);
+noeud** tableau_noeud( int **tabCara,int nbCara);
+void tricroissantNoeud( noeud** tab, int tab_size);
+
 
 /**
 * encoder_symbole : renvoit le code d'un symbole (char ascii) dans un arbre quelconque

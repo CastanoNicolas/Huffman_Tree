@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "huffman.h"
+#include "functions.h"
 #include "utilitaire_compression.h"
 
 
@@ -38,13 +39,13 @@ char encoder_symbole(tree* tree, char symbole, int* lg){
 	//tant qu'on ne pointe pas sur la tete, c'est à dire qu'on a fini de remonter l'arbre
 	while ( n != tree ){
 		//si la branche vaut 1 (fils droit)
-		if (n == n->parent->fils_droit)
+		if (n == n->pere->fils_droite)
 			res +=  1 << (*lg); //on ecrit 1 (bit) décallé en fonction de la profondeur 
 		//si la branche vaut 0  (fils gauche)
 		else res += 0 << (*lg); //on ecrit 0 (bit) décallé en fonction de la profondeur 
 
 		//on incremente
-		n = n->parent;
+		n = n->pere;
 		(*lg)++;
 	}
 
@@ -71,7 +72,7 @@ noeud* recherche_symbole_arbre(tree* tree, char symbole){
 		return tree;
 	}
 	//sinon on parcours le fils droit pour le trouver
-	else if(n = recherche_symbole_arbre(tree->fils_droit, symbole) != NULL){
+	else if((n = recherche_symbole_arbre(tree->fils_droite, symbole)) != NULL){
 		return n;
 	}
 	//et si il n'est pas dans le fils droit on parcours le fils gauche
@@ -106,6 +107,7 @@ char* tree_to_length_table(canonical_tree* tree) {
 	for (int i = 0; i < 256; i++) {
 		table[i] = 0;
 	}
+	return table;
 }
 
 /* QUENTIN */
