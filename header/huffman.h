@@ -4,9 +4,9 @@
 typedef struct n { 
 	int poid ; 
 	int caractere ;
-	noeud* fils_gauche ; 
-	noeud* fils_droite ; 
-	noeud* pere ; 
+	struct n* fils_gauche ; 
+	struct n* fils_droite ; 
+	struct n* pere ; 
 
 } noeud, huffman_tree, canonical_tree;
 
