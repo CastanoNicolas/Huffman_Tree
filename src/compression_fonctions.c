@@ -150,7 +150,7 @@ void run_length_encoding(char *file_name)
  * Prend en entrée un tableau de frequences, tableaux donnée par la fonction frequencies_of_occurences
  * construit et store dans une structure de donnée (malloc) l'arbre résultat
  **/
-    huffman_tree* build_huffman_tree(int* frequencies){
+ huffman_tree* build_huffman_tree(int* frequencies){
   int nbCara = 0;                                                               //On initialise une variable qui va contenir le nombre de caractere a plus de 1 occurence
 
   for(int i=0; i < TAILLE_TAB ; i++){                                            //on parcours le tableau de fréquences issu de frequencies_of_occurences
@@ -158,6 +158,8 @@ void run_length_encoding(char *file_name)
       nbCara ++;                                                                //on incrémente nbCara
   }
 }
+
+
 
   int** tabCara = malloc(nbCara * sizeof(int*));                                //on déclare une tableau a 2 dimensions de taille nbCara
   int y=0;                                                                      //on déclare une variable intermédiaire pour remplie tabCara
@@ -170,11 +172,14 @@ void run_length_encoding(char *file_name)
     }
   }
 
+if(nbCara > 1){
   tricroissant(tabCara,nbCara);                                                 //on tri notre tableau a double entrée dans l'ordre croissant
+}
   noeud** tabNoeud = tableau_noeud(tabCara,nbCara);                             //on créer un tableau de noeuds à partir de notre tableau trié
 
   noeud* tete = malloc(sizeof(noeud));                                          //on declare un noeud qui sera la tete de l'arbre final
 
+if(nbCara > 1){
   while(nbCara > 1){
     int i = 0;
 
@@ -212,6 +217,15 @@ void run_length_encoding(char *file_name)
     tricroissantNoeud(tabNoeud,nbCara);                                         //on tri le nouveau tableau
   }
 
+}
+
+else{                                                                           //dans le cas où on a un seul caractere
+  tete->poid = tabNoeud[0]->poid;                                                //on défini son poid comme la somme des 2 plus faibles
+  tete->caractere = tabNoeud[0]->caractere;                                     //son caractere vaut -1 car il n'est pas exploitable comme caractere
+  tete->fils_gauche = NULL;                                                     //son fils_gauche est le fils le plus bas
+  tete->fils_droite = NULL;                                                     //son fils droit est l'autre fils un peu supérieur
+  tete->pere = NULL;                                                             //il n'a pas de pere
+}
   return tete;                                                                  //on retourne la tete de l'arbre soit l'arbre en entier car les noeuds sont liés entre eux
 
 }
