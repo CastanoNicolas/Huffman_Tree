@@ -33,8 +33,8 @@ huffman_tree* build_huffman_tree(int* frequencies) {
                    // caractere a plus de 1 occurence
 
   for (int i = 0; i < TAILLE_TAB;
-       i++) {  // on parcours le tableau de fréquences issu de
-               // frequencies_of_occurences
+       i++) {                   // on parcours le tableau de fréquences issu de
+                                // frequencies_of_occurences
     if (frequencies[i] != 0) {  // si l'élement courant est supérieur a 0
       nbCara++;                 // on incrémente nbCara
     }
@@ -88,7 +88,7 @@ huffman_tree* build_huffman_tree(int* frequencies) {
     tabNoeud[i] = NULL;     // on supprime le fils gauche du tableau
     tabNoeud[i + 1] = tmp;  // on remplace le fils droit par le nouveau noeud
                             // pour le traitement suivant
-    tete = tmp;  // on fait pointé la tête sur ce nouveau noeud.
+    tete = tmp;             // on fait pointé la tête sur ce nouveau noeud.
 
     nbCara--;  // on diminu le nombre de cara a traiter
 
@@ -137,6 +137,8 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
   FILE* src = fopen(src_file_name, "r");
   FILE* dst = fopen(dst_file_name, "w");
 
+  fprintf(dst, "%c", 0);
+
   write_compressed_huffman_code(dst, tree);
 
   char c = lire_symbole(src);
@@ -144,6 +146,7 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
   char octet = 0;
   char buffer;
   int cmp = 0;
+  unsigned int nb_bits = 0;
   int lg;
   while (!feof(src)) {
     buffer = encoder_symbole(tree, c, &lg);
@@ -151,25 +154,36 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
       octet = (octet << lg);
       octet = octet | buffer;
       cmp = cmp + lg;
+      nb_bits += lg;
     } else if (cmp + lg == 8) {
       octet = (octet << lg) | buffer;
       ecrire_symbole(dst, octet);
       octet = 0;
       cmp = 0;
+      nb_bits += lg;
     } else {
       char temp = buffer;
       temp = temp >> (8 - cmp);
       octet = (octet << (8 - cmp)) | temp;
       ecrire_symbole(dst, octet);
       octet = (buffer << cmp) >> cmp;
-      cmp = lg-(8-cmp);
+      cmp = lg - (8 - cmp);
+      nb_bits += lg - (8 - cmp);
     }
     c = lire_symbole(src);
   }
 
-  if (!cmp) {
+  if (cmp) {
+    octet = octet<< (8-cmp);
     ecrire_symbole(dst, octet);
+    nb_bits += cmp;
   }
+
+  nb_bits = nb_bits % 8;
+
+  rewind(dst);
+
+  fprintf(dst, "%c", nb_bits);
 
   fclose(src);
   fclose(dst);

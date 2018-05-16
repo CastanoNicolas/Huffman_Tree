@@ -7,11 +7,11 @@
 
 int main() {
   int* frequence = frequencies_of_occurences("test.txt");
-  for (int i = 0; i < 256; i++) {
+  /*for (int i = 0; i < 256; i++) {
     if (frequence[i] != 0) {
       printf("%c %d\n", i, frequence[i]);
     }
-  }
+  }*/
   huffman_tree* arbre = build_huffman_tree(frequence);
   //afficher_arbre(arbre, 0);
 

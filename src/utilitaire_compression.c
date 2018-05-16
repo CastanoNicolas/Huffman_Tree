@@ -99,7 +99,7 @@ char* tree_to_length_table(canonical_tree* tree) {
     table[i] = 0;
   }
 
-  parcours_arbre(tree, table, 1);
+  parcours_arbre(tree, table, 0);
 
   return table;
 }
