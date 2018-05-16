@@ -12,4 +12,9 @@ typedef struct n {
 
 } noeud, huffman_tree, canonical_tree,tree;
 
+typedef struct {
+    int caractere;
+    int longueur;
+} tableau_constructif;
+
 #endif

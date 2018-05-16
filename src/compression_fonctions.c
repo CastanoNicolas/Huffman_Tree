@@ -267,13 +267,14 @@ canonical_tree *normal_tree_to_canonical_tree(huffman_tree *tree)
 
     tri_tableau(tab, nbf);
 
+/*
     for (int k = 0; k < nbf; k++)
     {
       printf("%d, ", tab[k].caractere);
       printf("%d\t", tab[k].longueur);
     }
     printf("\n");
-    
+*/
     canonical_tree *can_tree = malloc(sizeof(noeud)); //malloc la racine
     can_tree->pere = NULL;
 
@@ -304,7 +305,7 @@ canonical_tree *normal_tree_to_canonical_tree(huffman_tree *tree)
     {
         code = (code + 1) << ((tab[i + 1].longueur) - (tab[i].longueur));
         n = can_tree; // n = racine
-        for (j = 0; j <= tab[i+1].longueur; j++)
+        for (j = 1; j <= tab[i+1].longueur; j++)
         {
             if ((code & (1 << (tab[i+1].longueur - j))) != 0) 
             {   // bit = 1 --> on va a droite
