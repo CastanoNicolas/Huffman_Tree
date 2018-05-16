@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "huffman.h"
 #include "compression_fonctions.h"
-#include "utilitaire_compression.h"
 
 void decompression(char* file_source, char* file_destination){
   char* table = read_compressed_huffman_code(file_source);

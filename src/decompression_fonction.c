@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "huffman.h"
+#include "functions.h"
+#include "utilitaire_decompression.h"
 #define ASCII 255
 
 

@@ -1,18 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "huffman.h"
+#include "functions.h"
 #include "utilitaire_compression.h"
 
-/**
-* procedure qui initialise en dictionnaire en associant à chaque indice son charcatère ascii correspondant
-* la taille du tableau doit etre la même que la variable global ASCII (255)
-**/
-void init_dictionnaire(char* dictionnaire){
 
-  for(int i=0; i<ASCII ; i++){
-    dictionnaire[i]=(char)i;
-  }
-}
 
 /**
 * implemente la methode de compression Move to Front
@@ -58,7 +50,7 @@ void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture){
     symbole = lire_symbole(fichier_lecture);
   }
   
-}
+} 
 
 /* RAPHAEL */
 void run_length_encoding(char *file_name)

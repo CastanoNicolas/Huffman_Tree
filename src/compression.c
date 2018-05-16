@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "huffman.h"
 #include "compression_fonctions.h"
-#include "utilitaire_compression.h"
 
 void compression(char* file_source, char* file_destination){
   int* frequence = frequencies_of_occurences("test.txt");
