@@ -20,7 +20,7 @@ char* read_compressed_huffman_code(char* src_file_name) {
   return tab;
 }
 
-canonical_tree* length_table_to_canonical_tree(length_table* table){
+canonical_tree* length_table_to_canonical_tree(char* table){
 	return NULL;
 }
 
