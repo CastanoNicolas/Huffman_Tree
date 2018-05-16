@@ -57,7 +57,7 @@ int shell(FILE** fichier_entree, int argc, char const *argv[], int *c, int *d, c
 	}
 
 	if((*fichier_entree = fopen(nom_fichier,"r")) == NULL) *fichier_entree = stdin;
-	if(custom_name == 0) sprintf(output,"image%c",'\0');
+	if(custom_name == 0) sprintf(output,"fichier_destination%c",'\0');
 	return erreur;
 }
 
@@ -75,7 +75,7 @@ void affichage_erreur(int erreur){
 			printf("Only one -o expected.\n");
 			break;
 		case 4:
-			printf("Only one file expected.\n");
+			printf("-o expected before destination file.\n");
 			break;
 		case 5:
 			printf("Expect a file name after -o.\n");
@@ -114,7 +114,13 @@ int main(int argc, char const *argv[]) {
     affichage_erreur(erreur);
   }
   else{
-    printf("syntaxe ok\n");
+    if(c == 1){
+      printf("appeler compression vers %s\n",output);
+    }
+    if (d == 1){
+      printf("appeler decompression sur %s\n",output);
+    }
+    
   }
   
 }
