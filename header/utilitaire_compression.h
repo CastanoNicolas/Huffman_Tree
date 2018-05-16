@@ -32,11 +32,6 @@ renvoit NULL si le symbole n'est pas trouvé
 **/
 noeud* recherche_symbole_arbre(tree* tree, char symbole);
 
-/**
-* écrit dans un fichier un octet codé stocké dans chaine
-**/ 
-void ecrire_octet(FILE* fichier_ecriture, char chaine);
-
 
 /* Ergi */
 typedef struct {

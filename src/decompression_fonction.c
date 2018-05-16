@@ -28,7 +28,7 @@ canonical_tree* length_table_to_canonical_tree(char* table){
 }
 
 void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, canonical_tree* tree){
-
+	//ouverture des fichiers
 	FILE* fsrc = fopen(src_file_name,"r");
 	FILE* fdst = fopen(dst_file_name,"w");
 
@@ -38,36 +38,45 @@ void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, ca
 	do{
 		t=tree;
 		fscanf(fsrc,"%c",&c);
-
+		//tant que l'on parcours l'arbre, que la fin de fichier n'est pas reach, et que l'on est pas dans une feuille
 		while(t != NULL && !feof(fsrc) && t->caractere == -1){
+			// si le bit i de c vaut 0 alors on se deplace dans le fils gauche
 			if( (c & 0x1<< i) == 0 )
 				t=t->fils_gauche;
+			//sinon il vaut 1 et on va donc dans le fils droit
 			else 
 				t=t->fils_droite;
 			i++;
+			//si on a parcouru un octet entier, on passe à l'octet suivant pour lire la fin du symbole
 			if(i == 8){
 				i=0;
 				fscanf(fsrc,"%c",&c);				
 			} 
 		}
 		
-		if(t == NULL)
+		// le code du symbole n'est pas valide / problème de decodage
+		if(t == NULL){
 			printf("Erreur lors du decodage\n");
-		
-		if(feof(fsrc) && t->caractere == -1){
-			printf("Erreur lors de la lecture du dernier symbole\n");
 			exit(1);
 		}
-		else if (feof(fsrc) && t->caractere !=-1)
+		//fin de fichier et caractère non valide (on a pas attent une feuille)
+		if(feof(fsrc) && t->caractere == -1){
+			printf("Erreur lors de la lecture du dernier symbole\n");
+			exit(2);
+		}
+		//fin de fichier et on a attent une feuille
+		else if (feof(fsrc) && t->caractere !=-1){
 			printf("Pas de fichiers résiduels\n");
-
-
+		}
+		
+		//on recupere la valeur du symbole encodé et on l'ecrit
 		c_ascii = (t->caractere) & 0xFF;
 		ecrire_octet(fdst, c_ascii);
 
 	}while(!feof(fsrc));
 
-	// il faut tester les derniers bits
+	// il faut tester les derniers bits 
+	//pas forcement utile, a voir
 	while(i < 8){
 		t=tree;
 		while(t->caractere == -1 && i<8 ){
@@ -84,8 +93,8 @@ void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, ca
 
 	}
 
-	close(fsrc);
-	close(fdst);
+	fclose(fsrc);
+	fclose(fdst);
 	return;
 }
 

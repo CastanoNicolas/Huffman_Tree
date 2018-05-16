@@ -347,14 +347,14 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
       cmp = cmp + lg;
     } else if (cmp + lg == 8) {
       octet = (octet<<lg) | buffer;
-      ecrire_symbole(dst, octet);
+      ecrire_octet(dst, octet);
       octet = 0;
       cmp = 0;
     } else {
       char temp = buffer;
       temp = temp >> (lg - (8-cmp));
       octet = (octet<<(lg - (8-cmp))) | temp;
-      ecrire_symbole(dst, octet);
+      ecrire_octet(dst, octet);
       octet = (buffer << cmp) >> cmp;
       cmp = 8 - cmp;
     }
@@ -362,7 +362,7 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
   }
 
   if (!cmp) {
-    ecrire_symbole(dst, octet);
+    ecrire_octet(dst, octet);
   }
 
   fclose(src);
