@@ -15,6 +15,8 @@ int main(int argc, char const *argv[]) {
   huffman_tree* arbre = build_huffman_tree(frequence);
   afficher_arbre(arbre,0);
 
+  printf("\n====\n");
+
   canonical_tree* can_tree = normal_tree_to_canonical_tree (arbre);
   afficher_arbre(can_tree, 0);
 
