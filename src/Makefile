@@ -10,7 +10,7 @@ OBJS=$(SRC:.c=.o)
 
 CFLAGS=-Wall -g -Werror -I$(HDR_FOLDER)
 LDFLAGS=
-	all: $(EXEC)
+all: $(EXEC)
 
 $(EXEC): $(SRCS)
 	$(CC) -o $@ $^ $(LDFLAGS)
