@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #include "huffman.h"
 #include "functions.h"
 #include "utilitaire_decompression.h"
@@ -87,19 +88,25 @@ canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab, int tai
     return can_tree;
 }
 
-void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, canonical_tree* tree){
+void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, canonical_tree* tree, int nb_bit_invalide){
 	//ouverture des fichiers
 	FILE* fsrc = fopen(src_file_name,"r");
 	FILE* fdst = fopen(dst_file_name,"w");
 
-	char c, c_ascii;
+	char c, c_suivant, c_ascii;
 	canonical_tree* t=tree;
-	int i =0;
-	do{
+	int i =0, est_dernier_octet=0;
+	
+	est_dernier_octet = !fscanf(fsrc,"%c",&c_suivant);				
+
+	while( !est_dernier_octet ){
 		t=tree;
-		fscanf(fsrc,"%c",&c);
+		c = c_suivant;
+		est_dernier_octet = !fscanf(fsrc,"%c",&c_suivant);				
+		
+
 		//tant que l'on parcours l'arbre, que la fin de fichier n'est pas reach, et que l'on est pas dans une feuille
-		while(t != NULL && !feof(fsrc) && t->caractere == -1){
+		while(t != NULL && t->caractere == -1 && i!=8){
 			// si le bit i de c vaut 0 alors on se deplace dans le fils gauche
 			if( (c & 0x1<< i) == 0 )
 				t=t->fils_gauche;
@@ -108,9 +115,9 @@ void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, ca
 				t=t->fils_droite;
 			i++;
 			//si on a parcouru un octet entier, on passe à l'octet suivant pour lire la fin du symbole
-			if(i == 8){
+			if(i == 8 && !est_dernier_octet){
 				i=0;
-				fscanf(fsrc,"%c",&c);				
+				est_dernier_octet = !fscanf(fsrc,"%c",&c_suivant);
 			} 
 		}
 		
@@ -120,20 +127,16 @@ void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, ca
 			exit(1);
 		}
 		//fin de fichier et caractère non valide (on a pas attent une feuille)
-		if(feof(fsrc) && t->caractere == -1){
+		if(i==8 && t->caractere == -1){
 			printf("Erreur lors de la lecture du dernier symbole\n");
 			exit(2);
 		}
-		//fin de fichier et on a attent une feuille
-		else if (feof(fsrc) && t->caractere !=-1){
-			printf("Pas de fichiers résiduels\n");
-		}
-		
+		assert(t->caractere != -1);
 		//on recupere la valeur du symbole encodé et on l'ecrit
 		c_ascii = (t->caractere) & 0xFF;
 		ecrire_octet(fdst, c_ascii);
 
-	}while(!feof(fsrc));
+	}
 
 	// il faut tester les derniers bits 
 	//pas forcement utile, a voir
