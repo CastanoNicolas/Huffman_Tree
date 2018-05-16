@@ -112,9 +112,9 @@ char lire_symbole(FILE* f) {
 
 void ecrire_symbole(FILE* f, char c) { fprintf(f, "%c", c); }
 
-char encoder_symbole(canonical_tree* tree, char symbole, int* lg) {
+char* encoder_symbole(canonical_tree* tree, char symbole, int* lg) {
   noeud* n;
-  int res=0;
+  char* res = malloc(sizeof(char));
   *lg = 0;
 
   // parcours de l'arbre en recherchant sym
@@ -138,7 +138,7 @@ char encoder_symbole(canonical_tree* tree, char symbole, int* lg) {
     (*lg)++;
   }
 
-  return (char)res;
+  return res;
 }
 
 noeud* recherche_symbole_arbre(canonical_tree* tree, char symbole) {
@@ -158,4 +158,26 @@ noeud* recherche_symbole_arbre(canonical_tree* tree, char symbole) {
   // et si il n'est pas dans le fils droit on parcours le fils gauche
   else
     return recherche_symbole_arbre(tree->fils_gauche, symbole);
+}
+
+int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,
+                         FILE* dst) {
+  if (*cmp + lg < 8) {
+    *octet = (*octet << lg) | (*buffer);
+    *cmp = *cmp + lg;
+    return lg;
+  } else if (*cmp + lg == 8) {
+    *octet = (*octet << lg) | (*buffer);
+    ecrire_symbole(dst, *octet);
+    *octet = 0;
+    *cmp = 0;
+    return lg;
+  } else {
+    char temp = *buffer;
+    *octet = (*octet << (8 - *cmp)) | (temp >> (8 - *cmp));
+    ecrire_symbole(dst, *octet);
+    *octet = (*buffer << *cmp) >> *cmp;
+    *cmp = lg - (8 - *cmp);
+    return *cmp;
+  }
 }
