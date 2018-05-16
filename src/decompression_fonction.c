@@ -98,6 +98,51 @@ void read_and_store_compressed_file(char* src_file_name, char* dst_file_name, ca
 	return;
 }
 
+void run_length_decoding(char *file_name)
+{
+	FILE* fichier = NULL;
+	FILE* fichier_bis = NULL;
+    fichier = fopen(file_name, "r"); // ouverture en lecture
+	fichier_bis=fopen("rld.txt","w");
+	int convert_int;
+
+	int occurence =1;
+    char prec,courant,courant1,courant2;
+
+    if(fichier_bis == NULL){
+    	printf("Probleme");
+    	return;
+    }
+	
+
+	if (fichier != NULL)
+	{	
+		prec=lire_symbole(fichier);
+		courant=lire_symbole(fichier);
+		convert_int= prec - '0';
+
+
+		while(!(feof(fichier)))
+		{		
+			for(int i=0; i<convert_int; i++)
+			{
+				fprintf(fichier_bis,"%c",courant);
+			}
+			
+
+			printf("PREC %c\n", prec);
+			printf("COURANT %c\n", courant);
+			printf("EN ENTIER: %d\n", convert_int);
+
+			prec=lire_symbole(fichier);
+			courant=lire_symbole(fichier);
+			convert_int= prec - '0';			
+		}
+	}
+	else printf("Probleme lecture fichier");
+	
+}
+
 
 /**
 * Décompresse un fichier modifié avec la methode Move to Front
