@@ -258,7 +258,7 @@ canonical_tree *normal_tree_to_canonical_tree(huffman_tree *tree)
       printf("%d\t", tab[k].longueur);
     }
     printf("\n");
-    
+
     canonical_tree *can_tree = malloc(sizeof(noeud)); //malloc la racine
     can_tree->pere = NULL;
 
