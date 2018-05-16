@@ -90,7 +90,7 @@ canonical_tree *normal_tree_to_canonical_tree(huffman_tree *tree)
                 }
                 n = n->fils_gauche;
             }
-            n->caractere = tab[i+1].caractere;
         }
+        n->caractere = tab[i+1].caractere;
     }
 }
