@@ -185,6 +185,8 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
 
   fprintf(dst, "%c", nb_bits);
 
+  /*hfjsdhfksdbgkhtlsh*/
+
   fclose(src);
   fclose(dst);
 }
