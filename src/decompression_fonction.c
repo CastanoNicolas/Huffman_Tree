@@ -1,15 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdint.h>
 #include "huffman.h"
 #include "functions.h"
 #include "utilitaire_decompression.h"
 #define ASCII 255
 
 
-char* read_compressed_huffman_code(FILE* f,char* src_file_name, char* nb_bit_invalide) {
+uint8_t* read_compressed_huffman_code(FILE* f, uint8_t* nb_bit_invalide) {
 
-	char* tab = malloc(sizeof(char) * 256);
+	uint8_t* tab = malloc(sizeof(uint8_t) * 256);
 	fscanf(f,"%c",nb_bit_invalide);
 	for (int i = 0; i < 256; i++) {
 		fscanf(f, "%c", &tab[i]);
@@ -100,7 +101,7 @@ void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name, canonical_t
 	//ouverture des fichiers
 	FILE* fdst = fopen(dst_file_name,"w");
 
-	char c, c_suivant, c_ascii;
+	uint8_t c, c_suivant, c_ascii;
 	canonical_tree* t=tree;
 	int i =0, est_dernier_octet=0;
 	
@@ -195,7 +196,7 @@ void run_length_decoding(char *file_name)
     fichier_bis=fopen("rld.txt","w");
     int convert_int;
 
-    char prec,courant;
+    uint8_t prec,courant;
 
     if(fichier_bis == NULL){
     	printf("Probleme");
@@ -238,7 +239,7 @@ void run_length_decoding(char *file_name)
 **/
 void move_to_front_decompression(FILE* fichier_lecture, FILE* fichier_ecriture){
 	int indice;
-	char dictionnaire[ASCII];
+	uint8_t dictionnaire[ASCII];
 	int tmp;
 
 	init_dictionnaire(dictionnaire);
