@@ -1,7 +1,7 @@
 #ifndef DECOMPRESSION_FUN
 #define DECOMPRESSION_FUN
 
-char* read_compressed_huffman_code(FILE* f,char* src_file_name, char* nb_bit_invalide);
+uint8_t* read_compressed_huffman_code(FILE* f, uint8_t* nb_bit_invalide);
 
 canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab, int taille);
 

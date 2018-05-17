@@ -6,10 +6,10 @@
 
 void decompression(char* file_source, char* file_destination){
 
-	char nb_bit_invalide=0;
+	uint8_t nb_bit_invalide=0;
 	FILE* f= fopen(file_source,"r");
 
-	char* table = read_compressed_huffman_code(f,file_source,&nb_bit_invalide);
+	uint8_t* table = read_compressed_huffman_code(f,file_source,&nb_bit_invalide);
 	nb_bit_invalide = 8 - nb_bit_invalide;
   /* affichage de la table des longueurs */
 	int i=0;

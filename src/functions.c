@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "huffman.h"
 
 /**
 * procedure qui initialise en dictionnaire en associant à chaque indice son charcatère ascii correspondant
 * la taille du tableau doit etre la même que la variable global ASCII (255)
 **/
-void init_dictionnaire(char* dictionnaire){
+void init_dictionnaire(uint8_t* dictionnaire){
 
   for(int i=0; i<TAILLE_TAB ; i++){
-    dictionnaire[i]=(char)i;
+    dictionnaire[i]=(uint8_t)i;
   }
 }
 
@@ -42,7 +43,7 @@ int tree_depth(huffman_tree *a)
 /**
 * écrit dans un fichier un octet codé stocké dans chaine
 **/ 
-void ecrire_octet(FILE* fichier_ecriture, char chaine){
+void ecrire_octet(FILE* fichier_ecriture, uint8_t chaine){
   fprintf(fichier_ecriture, "%c", chaine);
 }
 
@@ -53,7 +54,7 @@ void ecrire_octet(FILE* fichier_ecriture, char chaine){
 * Aucun traitement sur l'entrée lue
 **/
 int lire_symbole(FILE* f){
-	char c;
+	uint8_t c;
 	if (fscanf(f, "%c", &c)){
 		return (int)c;
 	}
