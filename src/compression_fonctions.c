@@ -356,13 +356,14 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
   write_compressed_huffman_code(dst, tree);
 
   char c = lire_symbole(src), octet = 0, *buffer;
-  printf("symbole = %c", c);
+  //printf("symbole = %c", c);
   int cmp = 0, lg, nb_bits = 0;
 
   while (!feof(src)) {
     buffer = encoder_symbole(tree, c, &lg);
     if (lg <= 8) {
       nb_bits += traitement_caractere(&cmp, lg, &octet, buffer, dst);
+      printf("nb_bits = %d\n",nb_bits);
     } else {
       int nb_octet = lg / 8;
       int i = 0;
@@ -381,7 +382,6 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
   if (cmp) {
     octet = octet << (8 - cmp);
     ecrire_octet(dst, octet);
-    nb_bits += cmp;
   }
   nb_bits = nb_bits % 8;
   rewind(dst);
