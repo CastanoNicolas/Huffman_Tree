@@ -355,34 +355,42 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
   FILE* dst = fopen(dst_file_name, "w");
   fprintf(dst, "%c", 0);
   write_compressed_huffman_code(dst, tree);
+
+
   char c = lire_symbole(src);
+  printf("symbole = %c",c);
   char octet = 0;
   char* buffer;
   int cmp = 0;
   unsigned int nb_bits = 0;
   int lg;
+  
+
   while (!feof(src)) {
     buffer = encoder_symbole(tree, c, &lg);
+    printf(" le code :%x\n", *buffer);
     if (lg <= 8) {
       nb_bits += traitement_caractere(&cmp, lg, &octet, buffer, dst);
-    } else {
+    }
+    else {
       int nb_octet = lg / 8;
-      if (lg % 8 == 0) {
-        nb_bits += traitement_caractere(&cmp, 8, &octet, &buffer[0], dst);
-      } else {
-        nb_bits += traitement_caractere(&cmp, lg % 8, &octet, &buffer[0], dst);
-      }
-      int i = 1;
+      int i = 0;
       while (i < nb_octet) {
         nb_bits += traitement_caractere(&cmp, 8, &octet, &buffer[i], dst);
         i++;
       }
+      if (lg % 8 != 0) {
+        nb_bits += traitement_caractere(&cmp, lg%8, &octet, &buffer[nb_octet], dst);
+      }
     }
     c = lire_symbole(src);
+    printf("symbole = %c",c);
+
   }
+  
   if (cmp) {
     octet = octet << (8 - cmp);
-    ecrire_octet(dst, octet);
+    ecrire_octet  (dst, octet);
     nb_bits += cmp;
   }
   nb_bits = nb_bits % 8;

@@ -43,7 +43,8 @@ int tree_depth(huffman_tree *a)
 * écrit dans un fichier un octet codé stocké dans chaine
 **/ 
 void ecrire_octet(FILE* fichier_ecriture, char chaine){
-	fprintf(fichier_ecriture, "%c", chaine);
+  fprintf(fichier_ecriture, "%c", chaine);
+  printf("%x ", chaine);
 }
 
 

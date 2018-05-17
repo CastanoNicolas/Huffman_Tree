@@ -32,7 +32,8 @@ char* encoder_symbole(huffman_tree* tree, char symbole, int* lg);
 renvoit NULL si le symbole n'est pas trouvé
 * renvoit le noeud correspondant au symbole
 **/
-noeud* recherche_symbole_arbre(tree* tree, char symbole, int* profondeur);
+int profondeur(tree* tree, char symbole,int p);
+noeud* recherche_symbole_arbre(tree* tree, char symbole);
 
 /* Ergi */
 

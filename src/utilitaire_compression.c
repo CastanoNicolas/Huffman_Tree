@@ -5,6 +5,27 @@
 #include "utilitaire_compression.h"
 #include "huffman.h"
 
+
+int profondeur(tree* tree, char symbole,int p){
+  int k;
+  if (tree == NULL) {
+    return 0;
+  }
+
+  // si on a trouvé le charactère
+  if (tree->caractere == symbole) {
+    return p;
+  }
+  // sinon on parcours le fils droit pour le trouver
+  else if ( (k = profondeur(tree->fils_gauche,symbole, p+1)) != 0) {
+    return k;
+  }
+  // et si il n'est pas dans le fils droit on parcours le fils gauche
+  else {
+    return profondeur(tree->fils_droite, symbole,p+1);
+  }
+
+}
 /* JULIETTE */
 /**
  * encoder_symbole : renvoit le code d'un symbole (char ascii) dans un arbre
@@ -21,7 +42,7 @@ char* encoder_symbole(tree* tree, char symbole, int* lg) {
   int i = 0;
   int j = 0;
 
-  int* profondeur = 0;
+  int prof = 0;
 
   // on initialise le tableau
   for (int k = 0; k < 32; k++) {
@@ -29,22 +50,24 @@ char* encoder_symbole(tree* tree, char symbole, int* lg) {
   }
 
   // parcours de l'arbre en recherchant sym
-  n = recherche_symbole_arbre(tree, symbole, profondeur);
-
+  n = recherche_symbole_arbre(tree, symbole);
+  assert(n->caractere == symbole);
   // le nombre de bit necessaire pour ecrire le symbole codé
-  (*lg) = (*profondeur);
+  prof = profondeur(tree,symbole,0);
+  (*lg) = prof;
 
   // i indique dans quelle case du tableau on doit commencer à écrire
-  i = (*profondeur) / 8 - 1;
-  if (*profondeur % 8 != 0) i++;
+  i = (prof) / 8 - 1;
+  if (prof % 8 != 0) i++;
   // on indique a partir de quel rang on doit ecrire les bits
-  j = (7 - ((*profondeur) % 8) - 1) % 8;
-
+  j = (7 - ((prof % 8) - 1)) % 8;
   // ecriture du code de sym
   // tant qu'on ne pointe pas sur la tete, c'est à dire qu'on a fini de remonter
   // l'arbre
   while (n != tree) {
-    assert(i >= 0 && j >= 0 && j < 8);
+    assert(i >= 0);
+    assert(j >= 0);
+    assert(j < 8);
     // si la branche vaut 1 (fils droit)
     if (n == n->pere->fils_droite) {
       res[i] += 1 << j;  // on ecrit 1 (bit) décallé en fonction de la
@@ -74,7 +97,7 @@ char* encoder_symbole(tree* tree, char symbole, int* lg) {
  * renvoit NULL si le symbole n'est pas trouvé
  * renvoit le noeud correspondant au symbole
  **/
-noeud* recherche_symbole_arbre(tree* tree, char symbole, int* profondeur) {
+noeud* recherche_symbole_arbre(tree* tree, char symbole) {
   noeud* n;
 
   // si on arrive en fin d'arbre
@@ -87,14 +110,12 @@ noeud* recherche_symbole_arbre(tree* tree, char symbole, int* profondeur) {
     return tree;
   }
   // sinon on parcours le fils droit pour le trouver
-  else if ((n = recherche_symbole_arbre(tree->fils_droite, symbole,profondeur)) != NULL) {
-    (*profondeur)++;
+  else if ((n = recherche_symbole_arbre(tree->fils_droite, symbole)) != NULL) {
     return n;
   }
   // et si il n'est pas dans le fils droit on parcours le fils gauche
   else {
-    (*profondeur)++;
-    return recherche_symbole_arbre(tree->fils_gauche, symbole,profondeur);
+    return recherche_symbole_arbre(tree->fils_gauche, symbole);
   }
 }
 
@@ -117,6 +138,7 @@ char* tree_to_length_table(canonical_tree* tree) {
   for (int i = 0; i < 256; i++) {
     table[i] = 0;
   }
+  parcours_arbre(tree,table,0);
   return table;
 }
 
@@ -207,7 +229,7 @@ void afficher_arbre(noeud* tete, int niveau) {
 /* Ergi */
 
 void construction_par_niveau(huffman_tree* tree, int level, int longueur,
-                             int* p_indice, tableau_constructif* tab) {
+ int* p_indice, tableau_constructif* tab) {
   if (tree == NULL) return;
 
   if (level == 0) {
@@ -220,9 +242,9 @@ void construction_par_niveau(huffman_tree* tree, int level, int longueur,
 
   else if (level > 0) {
     construction_par_niveau(tree->fils_gauche, level - 1, longueur, p_indice,
-                            tab);
+      tab);
     construction_par_niveau(tree->fils_droite, level - 1, longueur, p_indice,
-                            tab);
+      tab);
   }
 }
 
@@ -254,23 +276,54 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
 }
 
 int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,
-                         FILE* dst) {
+ FILE* dst) {
   if (*cmp + lg < 8) {
-    *octet = (*octet << lg) | (*buffer);
+    printf("buffer avant decalage %x - ",*buffer);
+    char masque = 1;
+    for(int i = 0;i<lg-1;i++){
+      masque = (masque*2) +1;
+    }
+    *buffer = *buffer>>(8-lg);
+    *buffer = *buffer&masque;
+    printf("buffer apres decalage %x\n",*buffer);
+    *octet = (*octet << lg) | *buffer;
     *cmp = *cmp + lg;
+    printf("octet fin : %x %d",*octet,*cmp);
     return lg;
   } else if (*cmp + lg == 8) {
-    *octet = (*octet << lg) | (*buffer);
+    char masque = 1;
+    for(int i = 0;i<8-*cmp-1;i++){
+      masque = (masque*2) +1;
+    }
+    *buffer = *buffer>>*cmp;
+    *buffer = *buffer&masque;
+    *octet = (*octet << lg) | *buffer;
     ecrire_octet(dst, *octet);
     *octet = 0;
     *cmp = 0;
+    printf(" octet : %x\n", *octet);
     return lg;
   } else {
     char temp = *buffer;
-    *octet = (*octet << (8 - *cmp)) | (temp >> (8 - *cmp));
+    char masque = 1;
+    for(int i = 0;i<(8-*cmp-1);i++){
+      masque = (masque*2) +1;
+    }
+    temp = temp>>*cmp;
+    temp = temp&masque;
+    printf(" buffer apres decalage : %x \n",temp);
+    *octet = (*octet << (8 - *cmp)) | temp;
     ecrire_octet(dst, *octet);
-    *octet = (*buffer << *cmp) >> *cmp;
-    *cmp = lg - (8 - *cmp);
+    *octet = 0;
+    *octet = (*buffer >>(8-lg));
+    *cmp = lg - (8-*cmp);
+    masque = 1;
+    for(int i = 0;i<*cmp;i++){
+      masque = (masque*2) +1;
+    }
+    *octet = *octet&masque;
+    printf("if3");
+    printf(" octet : %x\n", *octet);
     return *cmp;
   }
 }
