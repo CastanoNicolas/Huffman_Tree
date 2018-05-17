@@ -44,11 +44,11 @@ int main(int argc, char const *argv[]) {
       if(d==1){
         sprintf(outputCompressed,"%s%s%c",input,".chf",'\0');
         printf("On effectue la compression de %s vers %s\n",input,outputCompressed);
-        compression(input,outputCompressed);
+        compression_avec_pretaitement(input,outputCompressed);
       }
       else{
         printf("On effectue la compression de %s vers %s\n",input,output);
-        compression(input,output);
+        compression_avec_pretaitement(input,output);
       }
       
     }
@@ -56,12 +56,12 @@ int main(int argc, char const *argv[]) {
       if(c == 0){
 
         printf("On effectue la decompression sur %s vers %s\n",input,output);
-        decompression(input,output);
+        decompression_avec_pretraitement(input,output);
       }
       else{
         
         printf("On effectue la decompression sur %s vers %s\n",outputCompressed,output);
-        decompression(outputCompressed,output);
+        decompression_avec_pretraitement(outputCompressed,output);
       }
     }
     

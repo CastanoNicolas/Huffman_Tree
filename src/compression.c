@@ -26,6 +26,8 @@ void compression_avec_pretaitement(char* file_source, char* file_destination){
   fclose(src);
   fclose(temp);
 
+  remove("temp.txt");
+
 
   int* frequence = frequencies_of_occurences(file_source);
   huffman_tree* arbre = build_huffman_tree(frequence);

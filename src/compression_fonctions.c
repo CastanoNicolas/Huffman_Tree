@@ -25,7 +25,6 @@ void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
 
   while (!(feof(fichier_lecture))) {
     // on recherche l'indice correspondant au symbole
-    printf("%d ", symbole);
     while (dictionnaire[i] != (uint8_t)symbole && i < TAILLE_TAB) {
       i++;
     }
@@ -74,7 +73,6 @@ void run_length_encoding(FILE* fichier_source, FILE* fichier_destination) {
           prec = courant;
           courant = lire_symbole(fichier_source);
         }
-        printf("occurence: %d\n", occurence);
         fprintf(fichier_destination, "%c%c", occurence, prec);
         occurence = 1;
       }

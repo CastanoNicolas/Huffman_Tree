@@ -86,4 +86,6 @@ void decompression_avec_pretraitement(char* file_source, char* file_destination)
 	fclose(dest);
 	fclose(temp);
 
+	remove("temp.txt");
+
 }
