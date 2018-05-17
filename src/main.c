@@ -8,16 +8,16 @@
 
 int main(int argc, char const *argv[]) {
 
-  //compression("test.o","test.o2");
-  //decompression("test.o2","test2.o");
+  compression("masterbis","masterbis2");
+  decompression("masterbis2","masterbis1");
 
   /*
 
     compression("test.txt","test.txt.hf");
   decompression("test.txt.hf","testbis");*/
 
-  compression("chalet.ppm","chalet.ppm.hf");
-  decompression("chalet.ppm.hf","chaletbis.ppm");
+  //compression("chalet.ppm","chalet.ppm.hf");
+  //decompression("chalet.ppm.hf","chaletbis.ppm");
 
 
   /*int* frequence = frequencies_of_occurences("test.txt");
