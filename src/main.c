@@ -1,126 +1,65 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include "huffman.h"
-//#include "compression_fonctions.h"
-//#include "utilitaire_compression.h"
-
-
-int shell(FILE** fichier_entree, int argc, char const *argv[], int *c, int *d, char output[]){
-	
-	int erreur = 0;
-	int fichier_present=0;
-	int custom_name=0;
-	char nom_fichier[100];
-	int i =1;
-
-	while(i < argc && !erreur){
-		if( *argv[i] == '-' ){
-			// on regarde s'il y a un -c
-			if(argv[i][1] == 'c'){
-				if(*c==1) erreur = 1;
-				else *c=1;
-			}
-			// on regarde s'il y a un -d
-			else if(argv[i][1] == 'd'){
-				if(*d == 1) erreur = 2;
-				else{
-					*d=1;	
-				} 
-			}
-			// on regarde s'il y a un -o
-			else if(argv[i][1] == 'o'){
-				if(custom_name ==1) erreur = 3;
-				else {
-					custom_name=1;
-					if(i != (argc-1) && argv[i+1][0] != '-'){
-						sprintf(output,"%s%c",argv[i+1],'\0');
-						i++;
-					}
-					else
-						erreur = 5;
-				}
-			}
-      else{
-        erreur = 7;
-      }
-		}
-		else{
-			if(fichier_present ==1){
-				erreur =  4;
-			}
-			else{
-				fichier_present = 1;
-				sprintf(nom_fichier,"%s%c", argv[i],'\0');
-			}
-		}
-		i++;
-	}
-
-	if((*fichier_entree = fopen(nom_fichier,"r")) == NULL) *fichier_entree = stdin;
-	if(custom_name == 0) sprintf(output,"fichier_destination%c",'\0');
-	return erreur;
-}
-
-
-void affichage_erreur(int erreur){
-
-	switch(erreur){
-		case 1:
-			printf("Only one -g expected.\n");
-			break;
-		case 2:
-			printf("Only one -b expected.\n");
-			break;
-		case 3:
-			printf("Only one -o expected.\n");
-			break;
-		case 4:
-			printf("-o expected before destination file.\n");
-			break;
-		case 5:
-			printf("Expect a file name after -o.\n");
-			break;
-		case 6:
-			printf("Incorrect image syntax.\n");
-			break;
-    case 7:
-  		printf("One option invalid.\n");
-  		break;
-	}
-	printf("Exiting program.\n");
-}
-
+#include <string.h>
+#include <unistd.h>
+#include "huffman.h"
+#include "compression.h"
+#include "decompression.h"
+#include "compression_fonctions.h"
+#include "utilitaire_compression.h"
+#include "cli.h"
 
 int main(int argc, char const *argv[]) {
 
-  /*int* frequence = frequencies_of_occurences("test.txt");
-  for(int i=0;i<256;i++){
-    if(frequence[i] != 0){
-      printf("%c %d\n",i,frequence[i]);
-    }
-  }
-  huffman_tree* arbre = build_huffman_tree(frequence);
-  afficher_arbre(arbre,0);
 
-  return 0;*/
-  
   FILE* file_source;
-  int c;
-  int d;
+  int c=0;
+  int d=0;
+  char* input = malloc(100*sizeof(char));
+  char* input2;
   char* output = malloc(100*sizeof(char));
+  char* output2 = malloc(strlen(input)+1);
+  char* output2Ext = malloc(strlen(input)+1);
   
-  int erreur = shell(&file_source,argc,argv,&c,&d,output);
+  int nbParam=0;
+  int source=0;
+  
+  int erreur = shell(&file_source,input,&source,argc,argv,&c,&d,&nbParam,output);
   if(erreur != 0){
     affichage_erreur(erreur);
   }
   else{
+    if(source == 0){
+      printf("Aucun nom de fichier source saisi, veuillez le faire maintenant :\n");
+      scanf("%s",input);
+      while(access(input,F_OK) == -1){
+        printf("Nom de fichier saisi incorrect, recommencez:\n");
+        scanf("%s",input);
+      }
+    }
     if(c == 1){
-      printf("appeler compression vers %s\n",output);
+      while(access(input,F_OK) == -1){
+        printf("Nom de fichier saisi incorrect, recommencez:\n");
+        scanf("%s",input);
+      }
+      printf("appeler compression de %s vers %s\n",input,output);
+      //compression(input,output);
+      
+      input2 = output;
+      output2Ext = strrchr(input,'.');
+      *output2Ext = '\0';
+      sprintf(output2,"%sbis%c",input,'\0');
+      
     }
     if (d == 1){
-      printf("appeler decompression sur %s\n",output);
+      if(c == 0)
+        printf("appeler decompression sur %s vers %s\n",input,output);
+      else
+        printf("appeler decompression sur %s vers %s\n",input2,output2);
+        //decompression(input2,output);
     }
     
   }
-  
+
+  return 0;
 }
