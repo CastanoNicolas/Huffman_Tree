@@ -1,7 +1,8 @@
 #ifndef COMPRESSION_FUN
 #define COMPRESSION_FUN
-
+#include <stdint.h>
 #include "huffman.h"
+
 
 /**
 * implemente la methode de compression Move to Front

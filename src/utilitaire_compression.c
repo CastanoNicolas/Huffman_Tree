@@ -1,11 +1,12 @@
-#include "utilitaire_compression.h"
+#include <stdint.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "functions.h"
 #include "huffman.h"
+#include "utilitaire_compression.h"
 
-int profondeur(tree* tree, char symbole, int p) {
+int profondeur(tree* tree, uint8_t symbole, int p) {
   int k;
   if (tree == NULL) {
     return 0;
@@ -33,9 +34,9 @@ int profondeur(tree* tree, char symbole, int p) {
  *octet. Convention : le poid d'un fils_gauche est mis à 0 et celui d'un
  *fils_droite à 1.
  **/
-char* encoder_symbole(tree* tree, char symbole, int* lg) {
+uint8_t* encoder_symbole(tree* tree, uint8_t symbole, int* lg) {
   noeud* n;
-  char* res = malloc(32);
+  uint8_t* res = malloc(32);
 
   int i = 0;
   int j = 0;
@@ -95,7 +96,7 @@ char* encoder_symbole(tree* tree, char symbole, int* lg) {
  * renvoit NULL si le symbole n'est pas trouvé
  * renvoit le noeud correspondant au symbole
  **/
-noeud* recherche_symbole_arbre(tree* tree, char symbole) {
+noeud* recherche_symbole_arbre(tree* tree, uint8_t symbole) {
   noeud* n;
 
   // si on arrive en fin d'arbre
@@ -119,7 +120,7 @@ noeud* recherche_symbole_arbre(tree* tree, char symbole) {
 
 /* ARIANE */
 
-void parcours_arbre(canonical_tree* tree, char* tableau, int profondeur) {
+void parcours_arbre(canonical_tree* tree, uint8_t* tableau, int profondeur) {
   if (tree == NULL) {
     return;
   } else {
@@ -131,8 +132,8 @@ void parcours_arbre(canonical_tree* tree, char* tableau, int profondeur) {
   }
 }
 
-char* tree_to_length_table(canonical_tree* tree) {
-  char* table = malloc(sizeof(char) * 256);
+uint8_t* tree_to_length_table(canonical_tree* tree) {
+  uint8_t* table = malloc(sizeof(uint8_t) * 256);
   for (int i = 0; i < 256; i++) {
     table[i] = 0;
   }
@@ -211,9 +212,9 @@ void afficher_arbre(noeud* tete, int niveau) {
       printf("\t");
     }
     if (tete->caractere != -1) {
-      printf(" %d (%c)\n\n", tete->poid, tete->caractere);
+      printf(" %d (%c)\n\n", niveau, tete->caractere);
     } else {
-      printf(" %d (NULL)\n\n", tete->poid);
+      printf(" %d (NULL)\n\n", niveau);
     }
 
     afficher_arbre(tete->fils_gauche, niveau + 1);
@@ -297,9 +298,9 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
 
 }
 
-int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,
+int traitement_caractere(int* cmp, int lg, uint8_t* octet, uint8_t* buffer,
  FILE* dst) {
-  char masque = 1;
+  uint8_t masque = 1;
   if (*cmp + lg < 8) {
     for (int i = 0; i < lg - 1; i++) {
       masque = (masque * 2) + 1;
@@ -317,7 +318,7 @@ int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,
     *octet = 0;
     *cmp = 0;
   } else {
-    char temp = *buffer;
+    uint8_t temp = *buffer;
     for (int i = 0; i < (8 - *cmp - 1); i++) {
       masque = (masque * 2) + 1;
     }

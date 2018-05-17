@@ -1,11 +1,12 @@
 #ifndef UTIL_C
 #define UTIL_C
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
 #include "huffman.h"
 
-void parcours_arbre(canonical_tree* tree, char* tableau, int profondeur);
-char* tree_to_length_table(canonical_tree* tree);
+void parcours_arbre(canonical_tree* tree, uint8_t* tableau, int profondeur);
+uint8_t* tree_to_length_table(canonical_tree* tree);
 int lire_symbole(FILE* f);
 void afficher_arbre(noeud* tete, int niveau);
 
@@ -13,7 +14,7 @@ void tricroissant(int** tab, int tab_size);
 noeud** tableau_noeud(int** tabCara, int nbCara);
 void tricroissantNoeud(noeud** tab, int tab_size);
 
-int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,
+int traitement_caractere(int* cmp, int lg, uint8_t* octet, uint8_t* buffer,
                          FILE* dst);
 
 /**
@@ -24,7 +25,7 @@ int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,
  *court qu'un octet. Convention : le poid d'un fils_gauche est mis à 0 et celui
  *d'un fils_droit à 1.
  **/
-char* encoder_symbole(huffman_tree* tree, char symbole, int* lg);
+uint8_t* encoder_symbole(huffman_tree* tree, uint8_t symbole, int* lg);
 
 /**
 * Parcours d'un arbre en recherchant un symbole (char ascii)
@@ -32,8 +33,8 @@ char* encoder_symbole(huffman_tree* tree, char symbole, int* lg);
 renvoit NULL si le symbole n'est pas trouvé
 * renvoit le noeud correspondant au symbole
 **/
-int profondeur(tree* tree, char symbole,int p);
-noeud* recherche_symbole_arbre(tree* tree, char symbole);
+int profondeur(tree* tree, uint8_t symbole,int p);
+noeud* recherche_symbole_arbre(tree* tree, uint8_t symbole);
 
 /* Ergi */
 

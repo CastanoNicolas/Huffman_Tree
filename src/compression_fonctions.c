@@ -114,7 +114,7 @@ int* frequencies_of_occurences(char* file_name) {
   if (fichier != NULL) {
     uint8_t lecture = lire_symbole(fichier);  // Appel fonction
     while (feof(fichier) == 0) {  // tant qu'on est pas à la fin du fichier
-      tab[(unsigned short int)lecture]++;
+      tab[lecture]++;
       lecture = lire_symbole(fichier);  // Appel fonction
     }
     fclose(fichier);  // Fermeture du fichier

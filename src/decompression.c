@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "huffman.h"
 #include "utilitaire_compression.h"
 #include "decompression_fonction.h"
@@ -9,7 +10,7 @@ void decompression(char* file_source, char* file_destination){
 	uint8_t nb_bit_invalide=0;
 	FILE* f= fopen(file_source,"r");
 
-	uint8_t* table = read_compressed_huffman_code(f,file_source,&nb_bit_invalide);
+	uint8_t* table = read_compressed_huffman_code(f,&nb_bit_invalide);
 	nb_bit_invalide = 8 - nb_bit_invalide;
   /* affichage de la table des longueurs */
 	int i=0;

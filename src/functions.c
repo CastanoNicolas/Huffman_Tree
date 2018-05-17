@@ -56,7 +56,6 @@ void ecrire_octet(FILE* fichier_ecriture, uint8_t chaine){
 int lire_symbole(FILE* f){
 	uint8_t c;
 	if (fscanf(f, "%c", &c)){
-    printf("LALA%c %d\n", c,(int)c);
 		return (int)c;
 	}
 	else return -1;
