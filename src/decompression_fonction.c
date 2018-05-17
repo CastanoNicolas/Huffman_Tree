@@ -22,6 +22,8 @@ canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab, int tai
 
 	  canonical_tree *can_tree = malloc(sizeof(noeud)); //malloc la racine
 	  can_tree->pere = NULL;
+	  can_tree->fils_gauche=NULL;
+
 
 	  int nbf = taille;
 	  int d = tab[taille-1].longueur;
@@ -43,7 +45,10 @@ canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab, int tai
     {
     	n->fils_gauche = malloc(sizeof(noeud));
     	n->fils_gauche->pere = n;
+    	n->fils_gauche->poid = 0;
     	n->caractere = -1;
+    	n->poid=0;
+    	n->fils_droite=NULL;
     	n = n->fils_gauche;
     }
     n->caractere = tab[0].caractere;
@@ -62,9 +67,14 @@ canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab, int tai
             	{
             		n->fils_droite = malloc(sizeof(noeud));
             		n->fils_droite->pere = n;
+            		n->fils_droite->poid=0;
+            		n->fils_droite->fils_droite=NULL;
+            		n->fils_droite->fils_gauche=NULL;
             		n->caractere = -1;
             	}
             	n = n->fils_droite;
+            	
+
             }
             else
             {   // bit = 0 --> on va a gauche
@@ -72,9 +82,13 @@ canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab, int tai
             	{
             		n->fils_gauche = malloc(sizeof(noeud));
             		n->fils_gauche->pere = n;
+            		n->fils_gauche->poid=0;
+            		n->fils_gauche->fils_droite=NULL;
+            		n->fils_gauche->fils_gauche=NULL;
             		n->caractere = -1;
             	}
             	n = n->fils_gauche;
+            
             }
         }
         n->caractere = tab[i+1].caractere;

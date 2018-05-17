@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "functions.h"
 #include "huffman.h"
 #include "utilitaire_compression.h"
@@ -29,7 +30,6 @@ void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
       i++;
     }
 
-    printf(" %d \n", i);
 
     // on ecrit l'indice correspondant au symbole dans le fichier de sortie
     ecrire_octet(fichier_ecriture, (char)i);
@@ -88,7 +88,7 @@ void run_length_encoding(char* file_name) {
       }
     }
   } else
-    printf("Probleme lecture fichier");
+  printf("Probleme lecture fichier");
 }
 
 // 3C analyse statique : calcul + tri des fréquences de symboles
@@ -143,11 +143,11 @@ huffman_tree* build_huffman_tree(int* frequencies) {
                                 // frequencies_of_occurences
     if (frequencies[i] != 0) {  // si l'élement courant est supérieur a 0
       nbCara++;                 // on incrémente nbCara
-    }
   }
+}
 
-  int** tabCara = malloc(
-      nbCara *
+int** tabCara = malloc(
+  nbCara *
       sizeof(int*));  // on déclare une tableau a 2 dimensions de taille nbCara
   int y = 0;  // on déclare une variable intermédiaire pour remplie tabCara
   for (int i = 0; i < TAILLE_TAB;
@@ -163,11 +163,11 @@ huffman_tree* build_huffman_tree(int* frequencies) {
 
   if (nbCara > 1) {
     tricroissant(
-        tabCara,
+      tabCara,
         nbCara);  // on tri notre tableau a double entrée dans l'ordre croissant
   }
   noeud** tabNoeud = tableau_noeud(
-      tabCara,
+    tabCara,
       nbCara);  // on créer un tableau de noeuds à partir de notre tableau trié
 
   noeud* tete = malloc(
@@ -179,7 +179,7 @@ huffman_tree* build_huffman_tree(int* frequencies) {
 
       noeud* tmp =
           malloc(sizeof(noeud));  // on initialise un noeud qui va etre créer
-      tmp->poid =
+          tmp->poid =
           tabNoeud[i]->poid +
           tabNoeud[i + 1]
               ->poid;  // on défini son poid comme la somme des 2 plus faibles
@@ -193,7 +193,7 @@ huffman_tree* build_huffman_tree(int* frequencies) {
 
       tabNoeud[i]->pere =
           tmp;  // le pere du fils gauche et droit devienne ce nouveau noeud
-      tabNoeud[i + 1]->pere = tmp;
+          tabNoeud[i + 1]->pere = tmp;
 
       tabNoeud[i] = NULL;     // on supprime le fils gauche du tableau
       tabNoeud[i + 1] = tmp;  // on remplace le fils droit par le nouveau noeud
@@ -230,7 +230,7 @@ huffman_tree* build_huffman_tree(int* frequencies) {
   else {  // dans le cas où on a un seul caractere
     tete->poid =
         tabNoeud[0]->poid;  // on défini son poid comme le poid de l'unique
-    tete->caractere =
+        tete->caractere =
         tabNoeud[0]
             ->caractere;       // son caractere vaut celui de l'unique caractere
     tete->fils_gauche = NULL;  // son fils_gauche est NULL
@@ -275,15 +275,9 @@ canonical_tree* normal_tree_to_canonical_tree(huffman_tree* tree) {
 
   tri_tableau(tab, nbf);
 
-  /*
-      for (int k = 0; k < nbf; k++)
-      {
-        printf("%d, ", tab[k].caractere);
-        printf("%d\t", tab[k].longueur);
-      }
-      printf("\n");
-  */
   canonical_tree* can_tree = malloc(sizeof(noeud));  // malloc la racine
+  assert(can_tree != NULL);
+  can_tree->fils_gauche = NULL;
   can_tree->pere = NULL;
 
   if (d == 0 && nbf == 1) {
@@ -300,7 +294,10 @@ canonical_tree* normal_tree_to_canonical_tree(huffman_tree* tree) {
   for (j = 0; j < tab[0].longueur; j++) {
     n->fils_gauche = malloc(sizeof(noeud));
     n->fils_gauche->pere = n;
+    n->fils_gauche->poid = 0;
     n->caractere = -1;
+    n->poid=0;  
+    n->fils_droite=NULL;
     n = n->fils_gauche;
   }
   n->caractere = tab[0].caractere;
@@ -311,11 +308,13 @@ canonical_tree* normal_tree_to_canonical_tree(huffman_tree* tree) {
     code = (code + 1) << ((tab[i + 1].longueur) - (tab[i].longueur));
     n = can_tree;  // n = racine
     for (j = 1; j <= tab[i + 1].longueur; j++) {
-      if ((code & (1 << (tab[i + 1].longueur - j))) !=
-          0) {  // bit = 1 --> on va a droite
+      if ((code & (1 << (tab[i + 1].longueur - j))) != 0) {  // bit = 1 --> on va a droite
         if (n->fils_droite == NULL) {
           n->fils_droite = malloc(sizeof(noeud));
           n->fils_droite->pere = n;
+          n->fils_droite->poid=0;
+          n->fils_droite->fils_droite=NULL;
+          n->fils_droite->fils_gauche=NULL;
           n->caractere = -1;
         }
         n = n->fils_droite;
@@ -323,6 +322,9 @@ canonical_tree* normal_tree_to_canonical_tree(huffman_tree* tree) {
         if (n->fils_gauche == NULL) {
           n->fils_gauche = malloc(sizeof(noeud));
           n->fils_gauche->pere = n;
+          n->fils_gauche->poid=0;
+          n->fils_gauche->fils_droite=NULL;
+          n->fils_gauche->fils_gauche=NULL;
           n->caractere = -1;
         }
         n = n->fils_gauche;
@@ -349,7 +351,7 @@ void write_compressed_huffman_code(FILE* dst_file, canonical_tree* tree) {
 }
 
 void write_compressed_file(char* src_file_name, char* dst_file_name,
-                           canonical_tree* tree) {
+ canonical_tree* tree) {
   FILE* src = fopen(src_file_name, "r");
   FILE* dst = fopen(dst_file_name, "w");
   fprintf(dst, "0");
@@ -363,7 +365,6 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
     buffer = encoder_symbole(tree, c, &lg);
     if (lg <= 8) {
       nb_bits += traitement_caractere(&cmp, lg, &octet, buffer, dst);
-      printf("nb_bits = %d\n",nb_bits);
     } else {
       int nb_octet = lg / 8;
       int i = 0;
@@ -373,7 +374,7 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
       }
       if (lg % 8 != 0) {
         nb_bits +=
-            traitement_caractere(&cmp, lg % 8, &octet, &buffer[nb_octet], dst);
+        traitement_caractere(&cmp, lg % 8, &octet, &buffer[nb_octet], dst);
       }
     }
     c = lire_symbole(src);

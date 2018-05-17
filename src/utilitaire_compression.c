@@ -204,6 +204,7 @@ void tricroissantNoeud(noeud** tab, int tab_size) {
 
 void afficher_arbre(noeud* tete, int niveau) {
   int i;
+  fflush(stdin);
   if (tete != NULL) {
     afficher_arbre(tete->fils_droite, niveau + 1);
     for (i = 0; i < niveau; i++) {
@@ -227,7 +228,7 @@ void afficher_arbre(noeud* tete, int niveau) {
 /* Ergi */
 
 void construction_par_niveau(huffman_tree* tree, int level, int longueur,
-                             int* p_indice, tableau_constructif* tab) {
+ int* p_indice, tableau_constructif* tab) {
   if (tree == NULL) return;
 
   if (level == 0) {
@@ -240,9 +241,9 @@ void construction_par_niveau(huffman_tree* tree, int level, int longueur,
 
   else if (level > 0) {
     construction_par_niveau(tree->fils_gauche, level - 1, longueur, p_indice,
-                            tab);
+      tab);
     construction_par_niveau(tree->fils_droite, level - 1, longueur, p_indice,
-                            tab);
+      tab);
   }
 }
 
@@ -252,6 +253,26 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
   int inf = 0;
   int sup = 0;
   int longueur;
+
+  tableau_constructif tmp;
+  int indice_min;
+  for(int i = 0; i<nbf; i++){
+    indice_min = i;
+    tmp.longueur = tab[i].longueur;
+    for(int j=i; j < nbf; j++){
+      if(tab[j].longueur < tmp.longueur){
+        indice_min =j;
+      }
+    }
+    tmp.longueur = tab[indice_min].longueur;
+    tmp.caractere = tab[indice_min].caractere;
+    tab[indice_min].longueur = tab[i].longueur;
+    tab[indice_min].caractere = tab[i].caractere;
+    tab[i].longueur = tmp.longueur;
+    tab[i].caractere = tmp.caractere;
+  }
+
+
 
   while (sup < nbf) {
     longueur = tab[inf].longueur;
@@ -274,7 +295,7 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
 }
 
 int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,
-                         FILE* dst) {
+ FILE* dst) {
   char masque = 1;
   if (*cmp + lg < 8) {
     for (int i = 0; i < lg - 1; i++) {
