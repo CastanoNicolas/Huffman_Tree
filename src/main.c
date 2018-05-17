@@ -16,10 +16,8 @@ int main(int argc, char const *argv[]) {
   int c=0;
   int d=0;
   char* input = malloc(100*sizeof(char));
-  char* input2;
   char* output = malloc(100*sizeof(char));
   char* outputCompressed = malloc(strlen(input)+1);
-  //char* outputCompressedExt = malloc(strlen(input)+1);
   
   int nbParam=0;
   int source=0;
@@ -43,25 +41,27 @@ int main(int argc, char const *argv[]) {
         scanf("%s",input);
       }
 
-      sprintf(outputCompressed,"%s%s%c",input,".chf",'\0');
-      printf("On effectue la compression de %s vers %s\n",input,outputCompressed);
-      compression(input,outputCompressed);
-      
-      
-      /*outputCompressedExt = strrchr(input,'.');
-      *outputCompressedExt = '\0';
-      sprintf(outputCompressed,"%sbis%c",input,'\0');*/
+      if(d==1){
+        sprintf(outputCompressed,"%s%s%c",input,".chf",'\0');
+        printf("On effectue la compression de %s vers %s\n",input,outputCompressed);
+        compression(input,outputCompressed);
+      }
+      else{
+        printf("On effectue la compression de %s vers %s\n",input,output);
+        compression(input,output);
+      }
       
     }
     if (d == 1){
       if(c == 0){
+
         printf("On effectue la decompression sur %s vers %s\n",input,output);
         decompression(input,output);
       }
       else{
-        input2 = outputCompressed;
-        printf("On effectue la decompression sur %s vers %s\n",input2,output);
-        decompression(input2,output);
+        
+        printf("On effectue la decompression sur %s vers %s\n",outputCompressed,output);
+        decompression(outputCompressed,output);
       }
     }
     

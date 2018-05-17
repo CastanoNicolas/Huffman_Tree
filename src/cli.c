@@ -37,7 +37,7 @@ int shell(FILE** fichier_entree,char* input, int* source,int argc, char const *a
 				else {
 					custom_name=1;
 					if(i != (argc-1) && argv[i+1][0] != '-'){
-						sprintf(output,"%s%s%c",argv[i+1],".dhf",'\0');
+						sprintf(output,"%s%c",argv[i+1],'\0');
             
 						i++;
 					}
@@ -69,7 +69,7 @@ int shell(FILE** fichier_entree,char* input, int* source,int argc, char const *a
     *fichier_entree = stdin;
   } 
 	if(custom_name == 0) {
-    sprintf(output,"fichier_destination.dhf%c",'\0');
+    erreur = 9;
   }
 	return erreur;
 }
@@ -96,12 +96,15 @@ void affichage_erreur(int erreur){
 		case 6:
 			printf("Incorrect image syntax.\n");
 			break;
-    case 7:
-  		printf("One option invalid.\n");
-  		break;
-    case 8:
-      printf("At least one option needed (-c for compression / -d for decompression)\n");
-      break;
+	    case 7:
+	  		printf("One option invalid.\n");
+	  		break;
+	    case 8:
+	      printf("At least one option needed (-c for compression / -d for decompression)\n");
+	      break;
+
+	    case 9:
+	    	printf("-o required with destination file name\n");
 	}
 	printf("Exiting program.\n");
 }
