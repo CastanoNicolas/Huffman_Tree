@@ -90,7 +90,10 @@ void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name, canonical_t
 	canonical_tree* t=tree;
 	int i =0, est_dernier_octet=0;
 	
-	est_dernier_octet = !fscanf(fsrc,"%c",&c_suivant);	
+	est_dernier_octet = !fscanf(fsrc,"%c",&c);	
+	printf("%d",est_dernier_octet);
+	
+	fflush(stdin);
 
 	if( !est_dernier_octet) est_dernier_octet = !fscanf(fsrc,"%c",&c_suivant);				
 	
@@ -101,7 +104,7 @@ void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name, canonical_t
 		//tant que l'on parcours l'arbre, que la fin de fichier n'est pas reach, et que l'on est pas dans une feuille
 		while(t != NULL && t->caractere == -1 && i!=8){
 			// si le bit i de c vaut 0 alors on se deplace dans le fils gauche
-			if( (c & 0x1<< i) == 0 )
+			if( (c & 0x1<< (7-i)) == 0 )
 				t=t->fils_gauche;
 			//sinon il vaut 1 et on va donc dans le fils droit
 			else 
@@ -111,7 +114,8 @@ void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name, canonical_t
 			if(i == 8 && !est_dernier_octet){
 				i=0;
 				c=c_suivant;
-				est_dernier_octet = !fscanf(fsrc,"%c",&c_suivant);
+				fscanf(fsrc,"%c",&c_suivant);
+				est_dernier_octet = feof(fsrc); 
 			} 
 		}
 		
