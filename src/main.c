@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "huffman.h"
+#include "compression.h"
 #include "decompression.h"
 #include "compression_fonctions.h"
 #include "utilitaire_compression.h"
 
 int main(int argc, char const *argv[]) {
 
+  compression("test.txt","test.txt.hf");
   decompression("test.txt.hf","testbis");
 
   /*int* frequence = frequencies_of_occurences("test.txt");
