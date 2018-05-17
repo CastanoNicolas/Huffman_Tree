@@ -24,5 +24,5 @@ $(OBJ_FOLDER)main.o: main.c $(wildcard $(HDR_FOLDER)*.h)
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	@rm -rf $(OBJ_FOLDER)*.o $(EXEC)
+	@rm -rf $(OBJ_FOLDER)*.o $(EXEC) *.chf *.dhf
 
