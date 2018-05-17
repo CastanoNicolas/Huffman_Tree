@@ -15,7 +15,7 @@
  **/
 void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
   int symbole;
-  char dictionnaire[TAILLE_TAB];
+  uint8_t dictionnaire[TAILLE_TAB];
   int i = 0;
 
   init_dictionnaire(dictionnaire);
@@ -26,13 +26,13 @@ void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
   while (!(feof(fichier_lecture))) {
     // on recherche l'indice correspondant au symbole
     printf("%d ", symbole);
-    while (dictionnaire[i] != (char)symbole && i < TAILLE_TAB) {
+    while (dictionnaire[i] != (uint8_t)symbole && i < TAILLE_TAB) {
       i++;
     }
 
 
     // on ecrit l'indice correspondant au symbole dans le fichier de sortie
-    ecrire_octet(fichier_ecriture, (char)i);
+    ecrire_octet(fichier_ecriture, (uint8_t)i);
 
     // on decale le tableau pour mettre à jour la frequence des derniers
     // caractères lu
@@ -58,8 +58,8 @@ void run_length_encoding(char* file_name) {
   fichier_bis = fopen("rle.txt", "w");
 
   int occurence = 1;
-  char courant;
-  char prec;
+  uint8_t courant;
+  uint8_t prec;
 
   if (fichier_bis == NULL) {
     printf("Probleme");
@@ -79,7 +79,7 @@ void run_length_encoding(char* file_name) {
           prec = courant;
           courant = lire_symbole(fichier);
         }
-        fprintf(fichier_bis, "%c%c", (char)(occurence + '0'), prec);
+        fprintf(fichier_bis, "%c%c", (uint8_t)(occurence + '0'), prec);
         occurence = 1;
       }
       prec = courant;
@@ -112,17 +112,23 @@ int* frequencies_of_occurences(char* file_name) {
   }
   fichier = fopen(file_name, "r");  // ouverture en lecture
   if (fichier != NULL) {
-    char lecture = lire_symbole(fichier);  // Appel fonction
+    uint8_t lecture = lire_symbole(fichier);  // Appel fonction
     while (feof(fichier) == 0) {  // tant qu'on est pas à la fin du fichier
-      tab[(int)lecture]++;
+      tab[(unsigned short int)lecture]++;
       lecture = lire_symbole(fichier);  // Appel fonction
     }
     fclose(fichier);  // Fermeture du fichier
+    /*for(int i=0; i < TAILLE_TAB; i++){
+      if( tab[i] != 0) printf("%d,%d",(int)i,tab[i]);
+    }*/
+
     return tab;
   } else {
     printf("Erreur de fichier\n");
     return NULL;
   }
+
+
 }
 
 /* QUENTIN */
@@ -343,7 +349,7 @@ void write_compressed_huffman_code(FILE* dst_file, canonical_tree* tree) {
     exit(1);
   }
 
-  char* code_length = tree_to_length_table(tree);
+  uint8_t* code_length = tree_to_length_table(tree);
 
   for (int i = 0; i < 256; i++) {
     fprintf(dst_file, "%c", code_length[i]);
@@ -357,7 +363,7 @@ void write_compressed_file(char* src_file_name, char* dst_file_name,
   fprintf(dst, "0");
   write_compressed_huffman_code(dst, tree);
 
-  char c = lire_symbole(src), octet = 0, *buffer;
+  uint8_t c = lire_symbole(src), octet = 0, *buffer;
   //printf("symbole = %c", c);
   int cmp = 0, lg, nb_bits = 0;
 
