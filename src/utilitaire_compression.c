@@ -1,12 +1,11 @@
+#include "utilitaire_compression.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include "functions.h"
-#include "utilitaire_compression.h"
 #include "huffman.h"
 
-
-int profondeur(tree* tree, char symbole,int p){
+int profondeur(tree* tree, char symbole, int p) {
   int k;
   if (tree == NULL) {
     return 0;
@@ -17,14 +16,13 @@ int profondeur(tree* tree, char symbole,int p){
     return p;
   }
   // sinon on parcours le fils droit pour le trouver
-  else if ( (k = profondeur(tree->fils_gauche,symbole, p+1)) != 0) {
+  else if ((k = profondeur(tree->fils_gauche, symbole, p + 1)) != 0) {
     return k;
   }
   // et si il n'est pas dans le fils droit on parcours le fils gauche
   else {
-    return profondeur(tree->fils_droite, symbole,p+1);
+    return profondeur(tree->fils_droite, symbole, p + 1);
   }
-
 }
 /* JULIETTE */
 /**
@@ -37,7 +35,7 @@ int profondeur(tree* tree, char symbole,int p){
  **/
 char* encoder_symbole(tree* tree, char symbole, int* lg) {
   noeud* n;
-  char *res = malloc(32);
+  char* res = malloc(32);
 
   int i = 0;
   int j = 0;
@@ -53,7 +51,7 @@ char* encoder_symbole(tree* tree, char symbole, int* lg) {
   n = recherche_symbole_arbre(tree, symbole);
   assert(n->caractere == symbole);
   // le nombre de bit necessaire pour ecrire le symbole codé
-  prof = profondeur(tree,symbole,0);
+  prof = profondeur(tree, symbole, 0);
   (*lg) = prof;
 
   // i indique dans quelle case du tableau on doit commencer à écrire
@@ -138,7 +136,7 @@ char* tree_to_length_table(canonical_tree* tree) {
   for (int i = 0; i < 256; i++) {
     table[i] = 0;
   }
-  parcours_arbre(tree,table,0);
+  parcours_arbre(tree, table, 0);
   return table;
 }
 
@@ -229,7 +227,7 @@ void afficher_arbre(noeud* tete, int niveau) {
 /* Ergi */
 
 void construction_par_niveau(huffman_tree* tree, int level, int longueur,
- int* p_indice, tableau_constructif* tab) {
+                             int* p_indice, tableau_constructif* tab) {
   if (tree == NULL) return;
 
   if (level == 0) {
@@ -242,9 +240,9 @@ void construction_par_niveau(huffman_tree* tree, int level, int longueur,
 
   else if (level > 0) {
     construction_par_niveau(tree->fils_gauche, level - 1, longueur, p_indice,
-      tab);
+                            tab);
     construction_par_niveau(tree->fils_droite, level - 1, longueur, p_indice,
-      tab);
+                            tab);
   }
 }
 
@@ -276,54 +274,40 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
 }
 
 int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,
- FILE* dst) {
+                         FILE* dst) {
+  char masque = 1;
   if (*cmp + lg < 8) {
-    printf("buffer avant decalage %x - ",*buffer);
-    char masque = 1;
-    for(int i = 0;i<lg-1;i++){
-      masque = (masque*2) +1;
+    for (int i = 0; i < lg - 1; i++) {
+      masque = (masque * 2) + 1;
     }
-    *buffer = *buffer>>(8-lg);
-    *buffer = *buffer&masque;
-    printf("buffer apres decalage %x\n",*buffer);
+    *buffer = (*buffer >> (8 - lg)) & masque;
     *octet = (*octet << lg) | *buffer;
     *cmp = *cmp + lg;
-    printf("octet fin : %x %d",*octet,*cmp);
-    return lg;
   } else if (*cmp + lg == 8) {
-    char masque = 1;
-    for(int i = 0;i<8-*cmp-1;i++){
-      masque = (masque*2) +1;
+    for (int i = 0; i < 8 - *cmp - 1; i++) {
+      masque = (masque * 2) + 1;
     }
-    *buffer = *buffer>>*cmp;
-    *buffer = *buffer&masque;
+    *buffer = (*buffer >> *cmp) & masque;
     *octet = (*octet << lg) | *buffer;
     ecrire_octet(dst, *octet);
     *octet = 0;
     *cmp = 0;
-    printf(" octet : %x\n", *octet);
-    return lg;
   } else {
     char temp = *buffer;
-    char masque = 1;
-    for(int i = 0;i<(8-*cmp-1);i++){
-      masque = (masque*2) +1;
+    for (int i = 0; i < (8 - *cmp - 1); i++) {
+      masque = (masque * 2) + 1;
     }
-    temp = temp>>*cmp;
-    temp = temp&masque;
-    printf(" buffer apres decalage : %x \n",temp);
+    temp = (temp >> *cmp) & masque;
     *octet = (*octet << (8 - *cmp)) | temp;
     ecrire_octet(dst, *octet);
     *octet = 0;
-    *octet = (*buffer >>(8-lg));
-    *cmp = lg - (8-*cmp);
+    *octet = (*buffer >> (8 - lg));
+    *cmp = lg - (8 - *cmp);
     masque = 1;
-    for(int i = 0;i<*cmp;i++){
-      masque = (masque*2) +1;
+    for (int i = 0; i < *cmp; i++) {
+      masque = (masque * 2) + 1;
     }
-    *octet = *octet&masque;
-    printf("if3");
-    printf(" octet : %x\n", *octet);
-    return *cmp;
+    *octet = *octet & masque;
   }
+  return lg;
 }
