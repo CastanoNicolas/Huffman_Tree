@@ -15,7 +15,7 @@
 void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture);
 
 /* RAPHAEL */
-void run_length_encoding(char *file_name);
+void run_length_encoding(FILE* fichier_source, FILE* fichier_destination);
 
 //3C analyse statique : calcul + tri des fréquences de symboles
 /**
