@@ -11,37 +11,33 @@ int lire_symbole(FILE* f){
 }
 
 
-void run_length_decoding(char *file_name)
+void run_length_decoding(FILE* fichier_source, FILE* fichier_destination)
 {
-	FILE* fichier = NULL;
-	FILE* fichier_bis = NULL;
-    fichier = fopen(file_name, "r"); // ouverture en lecture
-	fichier_bis=fopen("rld.txt","w");
 	int convert_int;
     char prec,courant;
 
-    if(fichier_bis == NULL)
+    if(fichier_destination == NULL)
     {
     	printf("Probleme sur rld.txt");
     	return;
     }
 	
 
-	if (fichier != NULL)
+	if (fichier_source != NULL)
 	{	
-		prec=lire_symbole(fichier);
-		courant=lire_symbole(fichier);
+		prec=lire_symbole(fichier_source);
+		courant=lire_symbole(fichier_source);
 		convert_int= prec - '0';
 
-		while(!(feof(fichier)))
+		while(!(feof(fichier_source)))
 		{		
 			for(int i=0; i<convert_int; i++)
 			{
-				fprintf(fichier_bis,"%c",courant);
+				fprintf(fichier_destination,"%c",courant);
 			}
 
-			prec=lire_symbole(fichier);
-			courant=lire_symbole(fichier);
+			prec=lire_symbole(fichier_source);
+			courant=lire_symbole(fichier_source);
 			convert_int= prec - '0';			
 		}
 	}
@@ -50,5 +46,9 @@ void run_length_decoding(char *file_name)
 
 int main()
 {
-	run_length_decoding("rle.txt");
+	FILE* fichier_source = NULL;
+	FILE* fichier_destination = NULL;
+    fichier_source = fopen("rle.txt", "r"); // ouverture en lecture
+	fichier_destination=fopen("rld.txt","w");
+	run_length_decoding(fichier_source, fichier_destination);
 }

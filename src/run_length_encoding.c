@@ -11,18 +11,13 @@ int lire_symbole(FILE* f){
 }
 
 
-void run_length_encoding(char *file_name)
+void run_length_encoding(FILE* fichier_source, FILE* fichier_destination)
 {
-	FILE* fichier = NULL;
-	FILE* fichier_bis = NULL;
-    fichier = fopen(file_name, "r"); // ouverture en lecture
-	fichier_bis=fopen("rle.txt","w");
-
 	int occurence =1;
     char courant;
     char prec;
 
-    if(fichier_bis == NULL)
+    if(fichier_destination == NULL)
     {
     	printf("Probleme");
     	return;
@@ -30,31 +25,31 @@ void run_length_encoding(char *file_name)
 	
 
 
-	if (fichier != NULL)
+	if (fichier_source != NULL)
 	{	
-		prec=lire_symbole(fichier);
-		courant=lire_symbole(fichier);
+		prec=lire_symbole(fichier_source);
+		courant=lire_symbole(fichier_source);
 
-		while(!(feof(fichier)))
+		while(!(feof(fichier_source)))
 		{
 			if(prec!=courant)
 			{
-				fprintf(fichier_bis,"1%c",prec);
+				fprintf(fichier_destination,"1%c",prec);
 			}
 			else{
-				while(prec==courant && occurence<=255 && !(feof(fichier)))
+				while(prec==courant && occurence<=255 && !(feof(fichier_source)))
 				{
 					occurence++;
 					prec=courant;
-					courant = lire_symbole(fichier);
+					courant = lire_symbole(fichier_source);
 				}
-				fprintf(fichier_bis, "%c%c", (char)(occurence + '0'), prec);
+				fprintf(fichier_destination, "%c%c", (char)(occurence + '0'), prec);
 				occurence=1;
 			}
 			prec=courant;
-			if(!(feof(fichier)))
+			if(!(feof(fichier_source)))
 			{
-				courant = lire_symbole(fichier);
+				courant = lire_symbole(fichier_source);
 			}
 		}
 	}
@@ -65,5 +60,9 @@ void run_length_encoding(char *file_name)
 
 int main()
 {
-run_length_encoding("test");
+	FILE* fichier_source = NULL;
+	FILE* fichier_destination = NULL;
+    fichier_source = fopen("test", "r"); // ouverture en lecture
+	fichier_destination=fopen("rle.txt","w");
+	run_length_encoding(fichier_source,fichier_destination);
 }
