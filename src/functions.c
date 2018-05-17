@@ -44,7 +44,6 @@ int tree_depth(huffman_tree *a)
 **/ 
 void ecrire_octet(FILE* fichier_ecriture, char chaine){
   fprintf(fichier_ecriture, "%c", chaine);
-  printf("%x ", chaine);
 }
 
 

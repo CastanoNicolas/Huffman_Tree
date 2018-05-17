@@ -3,7 +3,7 @@
 
 char* read_compressed_huffman_code(FILE* f,char* src_file_name, char* nb_bit_invalide);
 
-canonical_tree* length_table_to_canonical_tree(char* table);
+canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab, int taille);
 
 
 void read_and_store_compressed_file(FILE* fsource, char* dst_file_name, canonical_tree* tree, int nb_bit_invalide);
