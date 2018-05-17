@@ -13,4 +13,5 @@ void read_and_store_compressed_file(FILE* fsource, char* dst_file_name, canonica
 * le tableau initial (dictionnaire) doit être le même que celui donné à la fonction de compression
 **/
 void move_to_front_decompression(FILE* fichier_lecture, FILE* fichier_ecriture);
+void run_length_decoding(FILE* fichier_source, FILE* fichier_destination);
 #endif
