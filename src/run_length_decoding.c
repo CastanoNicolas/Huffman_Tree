@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
+
 
 int lire_symbole(FILE* f){
     char c;
@@ -13,8 +15,7 @@ int lire_symbole(FILE* f){
 
 void run_length_decoding(FILE* fichier_source, FILE* fichier_destination)
 {
-	int convert_int;
-    char prec,courant;
+    uint8_t prec,courant;
 
     if(fichier_destination == NULL)
     {
@@ -27,18 +28,16 @@ void run_length_decoding(FILE* fichier_source, FILE* fichier_destination)
 	{	
 		prec=lire_symbole(fichier_source);
 		courant=lire_symbole(fichier_source);
-		convert_int= prec - '0';
 
 		while(!(feof(fichier_source)))
 		{		
-			for(int i=0; i<convert_int; i++)
+			for(int i=0; i<prec; i++)
 			{
 				fprintf(fichier_destination,"%c",courant);
 			}
 
 			prec=lire_symbole(fichier_source);
-			courant=lire_symbole(fichier_source);
-			convert_int= prec - '0';			
+			courant=lire_symbole(fichier_source);			
 		}
 	}
 	else printf("Probleme lecture fichier");	

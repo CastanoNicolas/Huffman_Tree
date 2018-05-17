@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
+
+
 
 int lire_symbole(FILE* f){
     char c;
@@ -13,9 +16,10 @@ int lire_symbole(FILE* f){
 
 void run_length_encoding(FILE* fichier_source, FILE* fichier_destination)
 {
-	int occurence =1;
-    char courant;
-    char prec;
+	uint8_t occurence =1;
+    uint8_t courant;
+    uint8_t prec;
+    uint8_t un = 1;
 
     if(fichier_destination == NULL)
     {
@@ -28,13 +32,14 @@ void run_length_encoding(FILE* fichier_source, FILE* fichier_destination)
 	if (fichier_source != NULL)
 	{	
 		prec=lire_symbole(fichier_source);
-		courant=lire_symbole(fichier_source);
+		if(!(feof(fichier_source)))
+			courant=lire_symbole(fichier_source);
 
 		while(!(feof(fichier_source)))
 		{
 			if(prec!=courant)
 			{
-				fprintf(fichier_destination,"1%c",prec);
+				fprintf(fichier_destination,"%c%c",un,prec);
 			}
 			else{
 				while(prec==courant && occurence<=255 && !(feof(fichier_source)))
@@ -43,7 +48,8 @@ void run_length_encoding(FILE* fichier_source, FILE* fichier_destination)
 					prec=courant;
 					courant = lire_symbole(fichier_source);
 				}
-				fprintf(fichier_destination, "%c%c", (char)(occurence + '0'), prec);
+				printf("occurence: %d\n",occurence );
+				fprintf(fichier_destination, "%c%c", occurence, prec);
 				occurence=1;
 			}
 			prec=courant;
