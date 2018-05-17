@@ -256,11 +256,14 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
 
   tableau_constructif tmp;
   int indice_min;
+
+
   for(int i = 0; i<nbf; i++){
     indice_min = i;
     tmp.longueur = tab[i].longueur;
     for(int j=i; j < nbf; j++){
       if(tab[j].longueur < tmp.longueur){
+        tmp.longueur = tab[j].longueur;
         indice_min =j;
       }
     }
@@ -271,7 +274,6 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
     tab[i].longueur = tmp.longueur;
     tab[i].caractere = tmp.caractere;
   }
-
 
 
   while (sup < nbf) {
@@ -292,6 +294,7 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
       inf++;
     }
   }
+
 }
 
 int traitement_caractere(int* cmp, int lg, char* octet, char* buffer,

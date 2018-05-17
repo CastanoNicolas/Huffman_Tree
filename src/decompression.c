@@ -34,11 +34,6 @@ void decompression(char* file_source, char* file_destination){
 	}
 	tri_tableau(tab,nbf);
 
-	//printf("Dans decompression");
-	//printf("\n");
-	/*for(int k=0; k<nbf; k++){
-		printf("%d,%d\n",tab[k].caractere,tab[k].longueur);
-	}*/
 	printf("\n");
 	canonical_tree* arbreCanonical = length_table_to_canonical_tree(tab,nbf);
 	afficher_arbre(arbreCanonical,0);
