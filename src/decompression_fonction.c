@@ -151,12 +151,12 @@ void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name, canonical_t
 	}
 
 	// il faut tester les derniers bits 
-	if(est_dernier_octet && i < 8-nb_bit_invalide){
+	if(est_dernier_octet && i <= 8-nb_bit_invalide){
 		while(i < (8-nb_bit_invalide)){
 		// on attaque un nouveau symbole a decoder
 			t=tree;
-			while(t != NULL && t->caractere == -1 && i<8-nb_bit_invalide ){
-				if( (c & 0x1<< i) == 0 )
+			while(t != NULL && t->caractere == -1 && i<=8-nb_bit_invalide ){
+				if( (c & 0x1<< (7-i)) == 0 )
 					t=t->fils_gauche;
 				else 
 					t=t->fils_droite;
@@ -169,7 +169,7 @@ void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name, canonical_t
 				exit(11);
 			}
 			//fin de fichier et caractère non valide (on a pas attent une feuille)
-			if(i==8-nb_bit_invalide && t->caractere == -1){
+			if(i==(8-nb_bit_invalide) && t->caractere == -1){
 				printf("Erreur lors de la lecture du dernier symbole\n");
 				exit(12);
 			}
