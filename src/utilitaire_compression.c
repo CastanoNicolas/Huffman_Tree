@@ -1,10 +1,10 @@
-#include <stdint.h>
+#include "utilitaire_compression.h"
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "functions.h"
 #include "huffman.h"
-#include "utilitaire_compression.h"
 
 /**
 * Renvoie la profondeur d'un symbole dans l'arbre
@@ -128,8 +128,13 @@ noeud* recherche_symbole_arbre(tree* tree, uint8_t symbole) {
   }
 }
 
-/* ARIANE */
-
+/**
+ * Cette fonction parcours l'arbre canonique et rempli le tableau contenant les
+ * longueurs des codes.
+ * La fonction est récursive, pour chaque noeud elle regarde si le noeud
+ * contient un caractère et rempli la bonne case du tableau si nécessaire puis
+ * elle s'appelle sur ses fils.
+ **/
 void parcours_arbre(canonical_tree* tree, uint8_t* tableau, int profondeur) {
   if (tree == NULL) {
     return;
@@ -142,6 +147,10 @@ void parcours_arbre(canonical_tree* tree, uint8_t* tableau, int profondeur) {
   }
 }
 
+/**
+ * Cette fonction initialise le tableau des longueurs à 0 puis effectue le
+ * premier appel de la fonction récursive qui remplit le tableau
+ **/
 uint8_t* tree_to_length_table(canonical_tree* tree) {
   uint8_t* table = malloc(sizeof(uint8_t) * 256);
   for (int i = 0; i < 256; i++) {
@@ -239,7 +248,7 @@ void afficher_arbre(noeud* tete, int niveau) {
 /* Ergi */
 
 void construction_par_niveau(huffman_tree* tree, int level, int longueur,
- int* p_indice, tableau_constructif* tab) {
+                             int* p_indice, tableau_constructif* tab) {
   if (tree == NULL) return;
 
   if (level == 0) {
@@ -252,9 +261,9 @@ void construction_par_niveau(huffman_tree* tree, int level, int longueur,
 
   else if (level > 0) {
     construction_par_niveau(tree->fils_gauche, level - 1, longueur, p_indice,
-      tab);
+                            tab);
     construction_par_niveau(tree->fils_droite, level - 1, longueur, p_indice,
-      tab);
+                            tab);
   }
 }
 
@@ -268,14 +277,13 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
   tableau_constructif tmp;
   int indice_min;
 
-
-  for(int i = 0; i<nbf; i++){
+  for (int i = 0; i < nbf; i++) {
     indice_min = i;
     tmp.longueur = tab[i].longueur;
-    for(int j=i; j < nbf; j++){
-      if(tab[j].longueur < tmp.longueur){
+    for (int j = i; j < nbf; j++) {
+      if (tab[j].longueur < tmp.longueur) {
         tmp.longueur = tab[j].longueur;
-        indice_min =j;
+        indice_min = j;
       }
     }
     tmp.longueur = tab[indice_min].longueur;
@@ -285,7 +293,6 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
     tab[i].longueur = tmp.longueur;
     tab[i].caractere = tmp.caractere;
   }
-
 
   while (sup < nbf) {
     longueur = tab[inf].longueur;
@@ -305,11 +312,16 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
       inf++;
     }
   }
-
 }
 
+/**
+ * Cette fonction prend en argument octet un entier sur 8 bits et il rajoute à
+ * la fin les bits valides de buffer.
+ * Si l'octet est plein, on l'écrit dans le fichier destination et l'octet est
+ * réinitialisé à 0 auquel on rajoute les derniers bits de buffer le cas échéant
+ **/
 int traitement_caractere(int* cmp, int lg, uint8_t* octet, uint8_t* buffer,
- FILE* dst) {
+                         FILE* dst) {
   uint8_t masque = 1;
   if (*cmp + lg < 8) {
     for (int i = 0; i < lg - 1; i++) {
