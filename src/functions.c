@@ -14,10 +14,15 @@ void init_dictionnaire(uint8_t* dictionnaire){
   }
 }
 
-int max( int a , int b){
+
+int max(int a , int b){
   return (a>b)?a:b;
 }
 
+/**
+ * Chaque feuille de l'arbre est un caractere  
+ * @return le nombre de feuilles dans l'arbre de Huffman 
+**/
 int nb_feuilles(huffman_tree *tree)
 {
     if (tree == NULL)
@@ -30,7 +35,10 @@ int nb_feuilles(huffman_tree *tree)
         return (nb_feuilles(tree->fils_gauche) + nb_feuilles(tree->fils_droite));
 }
 
-/* racine a profondeur 0 */
+/**
+ * racine a profondeur 0 
+ * @return le profondeur de l'arbre
+**/
 int tree_depth(huffman_tree *a)
 {
     if (a == NULL)

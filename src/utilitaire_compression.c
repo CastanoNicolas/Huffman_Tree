@@ -1,11 +1,15 @@
-#include <stdint.h>
+#include "utilitaire_compression.h"
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "functions.h"
 #include "huffman.h"
-#include "utilitaire_compression.h"
 
+/**
+* Renvoie la profondeur d'un symbole dans l'arbre
+* renvoie 0 si le symbole n'est pas dans l'arbre ou que l'arbre est vide
+**/
 int profondeur(tree* tree, uint8_t symbole, int p) {
   int k;
   if (tree == NULL) {
@@ -25,14 +29,14 @@ int profondeur(tree* tree, uint8_t symbole, int p) {
     return profondeur(tree->fils_droite, symbole, p + 1);
   }
 }
-/* JULIETTE */
+
 /**
- * encoder_symbole : renvoit le code d'un symbole (char ascii) dans un arbre
- *quelconque On renvoit une chaine de caractère. Le code du symbole est placé
- *dans l'ordre Le pointeur sur entier lg contient la longueur (en nombre de bit)
- *du symbole codé. Attention : Le resultat peut donc etre plus court qu'un
- *octet. Convention : le poid d'un fils_gauche est mis à 0 et celui d'un
- *fils_droite à 1.
+ * encoder_symbole : renvoit le code d'un symbole (char ascii) dans un arbre quelconque.
+ * On renvoit une chaine de caractère. 
+ * Le code du symbole est placé dans une string, les bits de poids fort correspondant au debut du code (racine -> feuille)
+ * Le pointeur sur entier lg contient la longueur (en nombre de bit) du symbole codé. 
+ * Attention : Le resultat peut donc etre plus court qu'un octet. 
+ * Convention : le poid d'un fils_gauche est mis à 0 et celui d'un fils_droite à 1.
  **/
 uint8_t* encoder_symbole(tree* tree, uint8_t symbole, int* lg) {
   noeud* n;
@@ -51,26 +55,32 @@ uint8_t* encoder_symbole(tree* tree, uint8_t symbole, int* lg) {
   // parcours de l'arbre en recherchant sym
   n = recherche_symbole_arbre(tree, symbole);
   assert(n->caractere == symbole);
-  // le nombre de bit necessaire pour ecrire le symbole codé
+
+  // le nombre de bit necessaire pour ecrire le symbole 
   prof = profondeur(tree, symbole, 0);
+  //la longueur vaut la profondeur
   (*lg) = prof;
+
+  //on commence par ecrire la fin et on remonte dans l'arbre
 
   // i indique dans quelle case du tableau on doit commencer à écrire
   i = (prof) / 8 - 1;
+  //si on est dans le cas d'un nombre non multiple de 8, alors on augmente de 1 la colonne (7 -> i=-1 -> i= 0)
   if (prof % 8 != 0) i++;
-  // on indique a partir de quel rang on doit ecrire les bits
+
+  // on indique a partir de quel rang on doit ecrire les bits 
+  // si notre symbole fait 4 caractère, alors il sera ecrit dans la colonne 1, des bits 7 à 4, et j commence à 4. 
   j = (7 - ((prof % 8) - 1)) % 8;
+
   // ecriture du code de sym
-  // tant qu'on ne pointe pas sur la tete, c'est à dire qu'on a fini de remonter
-  // l'arbre
+  // tant qu'on ne pointe pas sur la tete, c'est à dire qu'on a fini de remonter l'arbre
   while (n != tree) {
     assert(i >= 0);
     assert(j >= 0);
     assert(j < 8);
     // si la branche vaut 1 (fils droit)
     if (n == n->pere->fils_droite) {
-      res[i] += 1 << j;  // on ecrit 1 (bit) décallé en fonction de la
-                         // profondeur
+      res[i] += 1 << j;  // on ecrit 1 (bit) décallé en fonction de la profondeur
     }
 
     // si la branche vaut 0  (fils gauche) decalage inutile
@@ -118,8 +128,13 @@ noeud* recherche_symbole_arbre(tree* tree, uint8_t symbole) {
   }
 }
 
-/* ARIANE */
-
+/**
+ * Cette fonction parcours l'arbre canonique et rempli le tableau contenant les
+ * longueurs des codes.
+ * La fonction est récursive, pour chaque noeud elle regarde si le noeud
+ * contient un caractère et rempli la bonne case du tableau si nécessaire puis
+ * elle s'appelle sur ses fils.
+ **/
 void parcours_arbre(canonical_tree* tree, uint8_t* tableau, int profondeur) {
   if (tree == NULL) {
     return;
@@ -132,6 +147,10 @@ void parcours_arbre(canonical_tree* tree, uint8_t* tableau, int profondeur) {
   }
 }
 
+/**
+ * Cette fonction initialise le tableau des longueurs à 0 puis effectue le
+ * premier appel de la fonction récursive qui remplit le tableau
+ **/
 uint8_t* tree_to_length_table(canonical_tree* tree) {
   uint8_t* table = malloc(sizeof(uint8_t) * 256);
   for (int i = 0; i < 256; i++) {
@@ -228,8 +247,12 @@ void afficher_arbre(noeud* tete, int niveau) {
 
 /* Ergi */
 
+/**
+ * Construit un tableau constructif i.e. un tableau de caracteres avec leur 
+ * longueur de code a partir d'un arbre de Huffman 
+**/
 void construction_par_niveau(huffman_tree* tree, int level, int longueur,
- int* p_indice, tableau_constructif* tab) {
+                             int* p_indice, tableau_constructif* tab) {
   if (tree == NULL) return;
 
   if (level == 0) {
@@ -242,12 +265,16 @@ void construction_par_niveau(huffman_tree* tree, int level, int longueur,
 
   else if (level > 0) {
     construction_par_niveau(tree->fils_gauche, level - 1, longueur, p_indice,
-      tab);
+                            tab);
     construction_par_niveau(tree->fils_droite, level - 1, longueur, p_indice,
-      tab);
+                            tab);
   }
 }
 
+/**
+ * Tri le tableau constructif d'abord par longueur corissante des codes et puis pour
+ * chaque segment de longeur, par ordre alphabetique des caracteres
+**/
 void tri_tableau(tableau_constructif* tab, int nbf) {
   int indice_car_min;
   int temp;
@@ -258,14 +285,13 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
   tableau_constructif tmp;
   int indice_min;
 
-
-  for(int i = 0; i<nbf; i++){
+  for (int i = 0; i < nbf; i++) {
     indice_min = i;
     tmp.longueur = tab[i].longueur;
-    for(int j=i; j < nbf; j++){
-      if(tab[j].longueur < tmp.longueur){
+    for (int j = i; j < nbf; j++) {
+      if (tab[j].longueur < tmp.longueur) {
         tmp.longueur = tab[j].longueur;
-        indice_min =j;
+        indice_min = j;
       }
     }
     tmp.longueur = tab[indice_min].longueur;
@@ -275,7 +301,6 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
     tab[i].longueur = tmp.longueur;
     tab[i].caractere = tmp.caractere;
   }
-
 
   while (sup < nbf) {
     longueur = tab[inf].longueur;
@@ -295,11 +320,16 @@ void tri_tableau(tableau_constructif* tab, int nbf) {
       inf++;
     }
   }
-
 }
 
+/**
+ * Cette fonction prend en argument octet un entier sur 8 bits et il rajoute à
+ * la fin les bits valides de buffer.
+ * Si l'octet est plein, on l'écrit dans le fichier destination et l'octet est
+ * réinitialisé à 0 auquel on rajoute les derniers bits de buffer le cas échéant
+ **/
 int traitement_caractere(int* cmp, int lg, uint8_t* octet, uint8_t* buffer,
- FILE* dst) {
+                         FILE* dst) {
   uint8_t masque = 1;
   if (*cmp + lg < 8) {
     for (int i = 0; i < lg - 1; i++) {
