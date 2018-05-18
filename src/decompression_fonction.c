@@ -17,6 +17,10 @@ uint8_t* read_compressed_huffman_code(FILE* f, uint8_t* nb_bit_invalide) {
   return tab;
 }
 
+/**
+ * Construit l'arbre canonique a partir a partir d'un tableau constructif
+ * i.e. un tableau avec les caracteres de l'arbre et leur longueur de code
+**/
 canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab,
                                                int taille) {
   canonical_tree* can_tree = malloc(sizeof(noeud));  // malloc la racine
