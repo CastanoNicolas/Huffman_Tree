@@ -6,12 +6,18 @@
 #include "utilitaire_compression.h"
 
 /**
+ * @File compression_fonction.c
+ * @Brief Fichier contenant les fonctions clés a la fonction de compression.
+ **/ 
+
+
+/**
  * implemente la methode de compression Move to Front
  * compare octet par octet, en suivant la table ascii
  * le tableau dictionnaire contient les caractères présent dans le fichier
  * il associe chaque indice à un charactère du fichier
  * l'ordre du dictionnaire au début n'importe pas
- * Attention : ce tableau sera modifié au cours du parcours move_to_front
+ * @Warning ce tableau sera modifié au cours du parcours move_to_front
  **/
 void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
   int symbole;
@@ -48,7 +54,12 @@ void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
   }
 }
 
-/* RAPHAEL */
+
+/**
+ * implemente la methode de compression Run length Encoding
+ * Necessaire 
+ **/
+
 void run_length_encoding(FILE* fichier_source, FILE* fichier_destination) {
   uint8_t occurence = 1;
   uint8_t courant;
@@ -85,15 +96,13 @@ void run_length_encoding(FILE* fichier_source, FILE* fichier_destination) {
     printf("Probleme lecture fichier");
 }
 
-// 3C analyse statique : calcul + tri des fréquences de symboles
 /**
+ * 3C analyse statique : calcul + tri des fréquences de symboles
  * prend un nom de fichier en paramètre, l'ouvre en lecture.
- *  alloue (malloc) un tableau "frequences" de taille 256 -- si et seulement si
- * on considere que tous les char ascii sont utilisés. Sinon  on fait un tableau
- * a deux dimensions avec le caractere ascii, suivit de sa frequence --
+ *  alloue (malloc) un tableau "frequences" de taille 256 
  * incrémente frequences[caractère_lu] a chaque caractere lu.
  * ferme le fichier précedement ouvert.
- * retourne le tableau frequence.
+ * @return le tableau frequences.
  */
 int* frequencies_of_occurences(char* file_name) {
   // raph
@@ -123,14 +132,13 @@ int* frequencies_of_occurences(char* file_name) {
   }
 }
 
-/* QUENTIN */
 
-// 4C détermination des longueurs des codes des symboles
-//  -- Il faut préalablement crere la structure de donnée huffman_tree
 /**
+ * 4C détermination des longueurs des codes des symboles
  * Prend en entrée un tableau de frequences, tableaux donnée par la fonction
- *frequencies_of_occurences construit et store dans une structure de donnée
- *(malloc) l'arbre résultat
+ * frequencies_of_occurences. Construit et store dans une structure de donnée
+ * (malloc) l'arbre de huffman résultat.
+ * @Return l'arbre de huffman associé à la table de fréquence.
  **/
 huffman_tree* build_huffman_tree(int* frequencies) {
   int nbCara = 0;  // On initialise une variable qui va contenir le nombre de
