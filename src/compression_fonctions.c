@@ -334,7 +334,11 @@ canonical_tree* normal_tree_to_canonical_tree(huffman_tree* tree) {
   return can_tree;
 }
 
-
+/**
+ * Cette fonction fait appel à la fonction tree_to_length_table qui renvoie le
+ * tableau des longueurs de code, puis écrit ce tableau dans le fichier
+ * destination.
+ **/
 void write_compressed_huffman_code(FILE* dst_file, canonical_tree* tree) {
   if (dst_file == NULL) {
     printf("Il y a eu une erreur lors de l'écriture du fichier compressé.\n");
@@ -348,6 +352,14 @@ void write_compressed_huffman_code(FILE* dst_file, canonical_tree* tree) {
   }
 }
 
+/**
+ * Cette fonction écrit dans le fichier destination la compression du fichier
+ * source. Le premier octet du fichier contient le nombre de bits valides. On
+ * écrit ensuite la table des longueurs. Ensuite on lit chaque symbole du
+ * fichier source dont on recupère le code compressé et sur lequel on appelle la
+ * fonction traitement_caractere. Le dernier octet n'est pas forcément ecrit
+ *dans le fichier alors on le rajoute
+ **/
 void write_compressed_file(char* src_file_name, char* dst_file_name,
                            canonical_tree* tree) {
   FILE* src = fopen(src_file_name, "r");
