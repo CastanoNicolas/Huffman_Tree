@@ -6,6 +6,11 @@
 #include "huffman.h"
 #include "utilitaire_decompression.h"
 #define ASCII 255
+/**
+ * @File decompression_fonction.c
+ * @Brief contient les fonctions liée a la decompression.
+ **/
+
 
 uint8_t* read_compressed_huffman_code(FILE* f, uint8_t* nb_bit_invalide) {
   uint8_t* tab = malloc(sizeof(uint8_t) * 256);
@@ -84,6 +89,14 @@ canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab,
   return can_tree;
 }
 
+
+/**
+ * Cette fonction Prend un pointeur sur fichier compressé en parametre ainsi que l'arbre canonique créé au préalable.
+ * Grace a cet arbre on peut décoder le fichier compressé a la volée. On lit jusqua pouvoir decoder un symbole, puis on écrit cet octet 
+ * dans le fichier ouvert en écriture nommé par le param dst_file_name. 
+ * A la fin le fichier destination contient le fichier d'entrée entierement decodé.
+ * Le parametre nb_bit_invalide indique combien de bit ne sont pas a considerer dans le dernier octet.
+**/
 void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name,
                                     canonical_tree* tree, int nb_bit_invalide) {
   // ouverture des fichiers
