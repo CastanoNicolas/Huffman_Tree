@@ -76,12 +76,15 @@ void decompression_avec_pretraitement(char* file_source, char* file_destination)
 	afficher_arbre(arbreCanonical,0);
 	read_and_store_compressed_file(f,file_destination,arbreCanonical,(int)nb_bit_invalide);
 
-	FILE* dest = fopen(file_destination,"r+w");
-	FILE* temp = fopen("temp.txt","r+w");
+	FILE* dest = fopen(file_destination,"r");
+	FILE* temp = fopen("temp.txt","w");
 
 	run_length_decoding(dest,temp);
-	rewind(dest);
-	rewind(temp);
+	fclose(dest);
+	fclose(temp);
+	temp = fopen("temp.txt","r");
+	dest = fopen(file_destination,"w");
+
 	move_to_front_decompression(temp, dest);
 	fclose(dest);
 	fclose(temp);
