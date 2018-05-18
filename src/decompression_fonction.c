@@ -111,7 +111,6 @@ void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name,
   int i = 0, est_dernier_octet = 0;
 
   est_dernier_octet = !fscanf(fsrc, "%c", &c);
-  printf("%d", est_dernier_octet);
 
   fflush(stdin);
 
