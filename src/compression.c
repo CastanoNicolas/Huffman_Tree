@@ -9,31 +9,34 @@ void compression(char* file_source, char* file_destination){
   huffman_tree* arbre = build_huffman_tree(frequence);
   canonical_tree* arbreCanonical = normal_tree_to_canonical_tree(arbre);
 
-  afficher_arbre(arbreCanonical, 0);
-
   write_compressed_file(file_source, file_destination, arbreCanonical);
 }
 
 void compression_avec_pretaitement(char* file_source, char* file_destination){
 
-  FILE* src = fopen(file_source,"r+w");
-  FILE* temp = fopen("temp.txt","w+r");
+  FILE* src = fopen(file_source,"r");
+  FILE* temp = fopen("temp.txt","w");
 
   move_to_front_compression(src, temp);
-  rewind(src);
-  rewind(temp);
-  run_length_encoding(temp,src);
   fclose(src);
   fclose(temp);
+  src = fopen("temp.txt","r");
+  FILE* final = fopen("temp2.txt","w");
 
-  remove("temp.txt");
+  run_length_encoding(src,final);
+  fclose(src);
+  fclose(final);
 
 
-  int* frequence = frequencies_of_occurences(file_source);
+  int* frequence = frequencies_of_occurences("temp2.txt");
   huffman_tree* arbre = build_huffman_tree(frequence);
   canonical_tree* arbreCanonical = normal_tree_to_canonical_tree(arbre);
 
-  afficher_arbre(arbreCanonical, 0);
 
-  write_compressed_file(file_source, file_destination, arbreCanonical);
+  write_compressed_file("temp2.txt", file_destination, arbreCanonical);
+
+
+  remove("temp.txt");
+  remove("temp2.txt");
+
 }

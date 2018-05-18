@@ -37,7 +37,6 @@ void decompression(char* file_source, char* file_destination){
 
 	printf("\n");
 	canonical_tree* arbreCanonical = length_table_to_canonical_tree(tab,nbf);
-	afficher_arbre(arbreCanonical,0);
 	read_and_store_compressed_file(f,file_destination,arbreCanonical,(int)nb_bit_invalide);
 }
 
@@ -71,9 +70,7 @@ void decompression_avec_pretraitement(char* file_source, char* file_destination)
 	}
 	tri_tableau(tab,nbf);
 
-	printf("\n");
 	canonical_tree* arbreCanonical = length_table_to_canonical_tree(tab,nbf);
-	afficher_arbre(arbreCanonical,0);
 	read_and_store_compressed_file(f,file_destination,arbreCanonical,(int)nb_bit_invalide);
 
 	FILE* dest = fopen(file_destination,"r");
