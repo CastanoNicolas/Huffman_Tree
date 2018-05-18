@@ -6,11 +6,13 @@
 #include "utilitaire_compression.h"
 
 /**
- * implemente la methode de compression Move to Front
+ * implemente la methode de pretraitement Move to Front
  * compare octet par octet, en suivant la table ascii
  * le tableau dictionnaire contient les caractères présent dans le fichier
  * il associe chaque indice à un charactère du fichier
  * l'ordre du dictionnaire au début n'importe pas
+ * Le fichier source contient le code à encoder
+ * le fichier destination doit être vide, il contiendra le fichier encodé
  * Attention : ce tableau sera modifié au cours du parcours move_to_front
  **/
 void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
@@ -48,7 +50,13 @@ void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
   }
 }
 
-/* RAPHAEL */
+/**
+* implemente la methode de pretraitement RLE
+* Les fichier source et destination doivent être ouvert au préalable
+* Le fichier source contient le code à encoder
+* le fichier destination doit être vide, il contiendra le fichier encodé
+* le fichier destination contiendra une alternance de un octet a considerer comme un nombre et un octet à considerer comme un caractère ASCII
+**/
 void run_length_encoding(FILE* fichier_source, FILE* fichier_destination) {
   uint8_t occurence = 1;
   uint8_t courant;
@@ -65,17 +73,23 @@ void run_length_encoding(FILE* fichier_source, FILE* fichier_destination) {
     if (!(feof(fichier_source))) courant = lire_symbole(fichier_source);
 
     while (!(feof(fichier_source))) {
+      //si il y a a seulement une occurence d'un caractère
       if (prec != courant) {
         fprintf(fichier_destination, "%c%c", un, prec);
+      //sinon il y a plusieur occurence du caractère
       } else {
+        //on compte le nombre d'occurence du caractère
         while (prec == courant && occurence <= 255 && !(feof(fichier_source))) {
           occurence++;
           prec = courant;
           courant = lire_symbole(fichier_source);
         }
+        //maximum 255 occurences, si il y en plus, on les réecrit a la suite
+        //par exemple, 510 * e, donnera dans le fichier 255e255e
         fprintf(fichier_destination, "%c%c", occurence, prec);
         occurence = 1;
       }
+      //on avance
       prec = courant;
       if (!(feof(fichier_source))) {
         courant = lire_symbole(fichier_source);
