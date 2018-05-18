@@ -1,24 +1,71 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include "huffman.h"
+#include "compression.h"
+#include "decompression.h"
 #include "compression_fonctions.h"
 #include "utilitaire_compression.h"
+#include "cli.h"
 
 int main(int argc, char const *argv[]) {
 
-  int* frequence = frequencies_of_occurences("test.txt");
-  for(int i=0;i<256;i++){
-    if(frequence[i] != 0){
-      printf("%c %d\n",i,frequence[i]);
-    }
+
+  FILE* file_source;
+  int c=0;
+  int d=0;
+  char* input = malloc(100*sizeof(char));
+  char* output = malloc(100*sizeof(char));
+  char* outputCompressed = malloc(strlen(input)+1);
+  
+  int nbParam=0;
+  int source=0;
+  
+  int erreur = shell(&file_source,input,&source,argc,argv,&c,&d,&nbParam,output);
+  if(erreur != 0){
+    affichage_erreur(erreur);
   }
-  huffman_tree* arbre = build_huffman_tree(frequence);
-  afficher_arbre(arbre,0);
+  else{
+    if(source == 0){
+      printf("Aucun nom de fichier source saisi, veuillez le faire maintenant :\n");
+      scanf("%s",input);
+      while(access(input,F_OK) == -1){
+        printf("Nom de fichier saisi incorrect, recommencez:\n");
+        scanf("%s",input);
+      }
+    }
+    if(c == 1){
+      while(access(input,F_OK) == -1){
+        printf("Nom de fichier saisi incorrect, recommencez:\n");
+        scanf("%s",input);
+      }
 
-  printf("\n====\n");
+      if(d==1){
+        sprintf(outputCompressed,"%s%s%c",input,".chf",'\0');
+        printf("On effectue la compression de %s vers %s\n",input,outputCompressed);
+        compression_avec_pretaitement(input,outputCompressed);
+      }
+      else{
+        printf("On effectue la compression de %s vers %s\n",input,output);
+        compression_avec_pretaitement(input,output);
+      }
+      
+    }
+    if (d == 1){
+      if(c == 0){
 
-  canonical_tree* can_tree = normal_tree_to_canonical_tree (arbre);
-  afficher_arbre(can_tree, 0);
+        printf("On effectue la decompression sur %s vers %s\n",input,output);
+        decompression_avec_pretraitement(input,output);
+      }
+      else{
+        
+        printf("On effectue la decompression sur %s vers %s\n",outputCompressed,output);
+        decompression_avec_pretraitement(outputCompressed,output);
+      }
+    }
+    
+  }
 
   return 0;
 }

@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "decompression_fonction.h": "c",
-        "utilitaire_compression.h": "c"
+        "utilitaire_compression.h": "c",
+        "decompression.h": "c",
+        "compression.h": "c",
+        "compression_fonctions.h": "c",
+        "huffman.h": "c"
     }
 }
