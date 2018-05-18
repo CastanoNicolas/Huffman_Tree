@@ -282,56 +282,7 @@ void construction_par_niveau(huffman_tree* tree, int level, int longueur,
   }
 }
 
-/**
- * Tri le tableau constructif d'abord par longueur corissante des codes et puis pour
- * chaque segment de longeur, par ordre alphabetique des caracteres
-**/
-void tri_tableau(tableau_constructif* tab, int nbf) {
-  int indice_car_min;
-  int temp;
-  int inf = 0;
-  int sup = 0;
-  int longueur;
 
-  tableau_constructif tmp;
-  int indice_min;
-
-  for (int i = 0; i < nbf; i++) {
-    indice_min = i;
-    tmp.longueur = tab[i].longueur;
-    for (int j = i; j < nbf; j++) {
-      if (tab[j].longueur < tmp.longueur) {
-        tmp.longueur = tab[j].longueur;
-        indice_min = j;
-      }
-    }
-    tmp.longueur = tab[indice_min].longueur;
-    tmp.caractere = tab[indice_min].caractere;
-    tab[indice_min].longueur = tab[i].longueur;
-    tab[indice_min].caractere = tab[i].caractere;
-    tab[i].longueur = tmp.longueur;
-    tab[i].caractere = tmp.caractere;
-  }
-
-  while (sup < nbf) {
-    longueur = tab[inf].longueur;
-    while (longueur == tab[sup].longueur) sup++;
-
-    while (inf < sup) {
-      indice_car_min = inf;
-      int i = inf;
-      while (i < sup) {
-        if (tab[i].caractere < tab[indice_car_min].caractere)
-          indice_car_min = i;
-        i++;
-      }
-      temp = tab[inf].caractere;
-      tab[inf].caractere = tab[indice_car_min].caractere;
-      tab[indice_car_min].caractere = temp;
-      inf++;
-    }
-  }
-}
 
 /**
  * Cette fonction prend en argument octet un entier sur 8 bits et il rajoute à
