@@ -333,7 +333,6 @@ canonical_tree* normal_tree_to_canonical_tree(huffman_tree* tree) {
   return can_tree;
 }
 
-/* ARIANE */
 
 void write_compressed_huffman_code(FILE* dst_file, canonical_tree* tree) {
   if (dst_file == NULL) {
