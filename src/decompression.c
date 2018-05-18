@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "huffman.h"
-#include "utilitaire_compression.h"
+#include "functions.h"
 #include "decompression_fonction.h"
 
 void decompression(char* file_source, char* file_destination){

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "huffman.h"
-#include "utilitaire_compression.h"
 #include "compression_fonctions.h"
 
 void compression(char* file_source, char* file_destination){

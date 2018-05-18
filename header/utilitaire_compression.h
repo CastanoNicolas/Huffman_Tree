@@ -45,7 +45,6 @@ int tree_depth(huffman_tree* a);
 void construction_par_niveau(huffman_tree* tree, int level, int longueur,
                              int* p_indice, tableau_constructif* tab);
 
-void tri_tableau(tableau_constructif* tab, int nbf);
 /* Fin Ergi */
 
 #endif
