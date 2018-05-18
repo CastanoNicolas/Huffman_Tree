@@ -173,6 +173,13 @@ void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name,
   return;
 }
 
+/**
+* implemente la methode de décodage du pretraitement RLE
+* Les fichier source et destination doivent être ouvert au préalable
+* le fichier destination contiendra une alternance de un octet a considerer comme un nombre et un octet à considerer comme un caractère ASCII
+* Le fichier source contient le code encodé
+* Le fichier destination doit être vide, il contiendra le fichier decodé
+**/
 void run_length_decoding(FILE* fichier_source, FILE* fichier_destination) {
   uint8_t prec, courant;
 
@@ -183,24 +190,27 @@ void run_length_decoding(FILE* fichier_source, FILE* fichier_destination) {
 
   if (fichier_source != NULL) {
     prec = lire_symbole(fichier_source);
-    courant = lire_symbole(fichier_source);
+    if (!(feof(fichier_source))) courant = lire_symbole(fichier_source);
 
+    //on décode
     while (!(feof(fichier_source))) {
       for (int i = 0; i < prec; i++) {
         fprintf(fichier_destination, "%c", courant);
       }
-
+      //on avance
       prec = lire_symbole(fichier_source);
-      courant = lire_symbole(fichier_source);
+      if (!(feof(fichier_source))) courant = lire_symbole(fichier_source);
     }
   } else
-    printf("Probleme lecture fichier");
+  printf("Probleme lecture fichier");
 }
 
 /**
  * Décompresse un fichier modifié avec la methode Move to Front
- * le tableau initial (dictionnaire) doit être le même que celui donné à la
- *fonction de compression
+ * Le tableau initial (dictionnaire) doit être le même que celui donné à la
+ * fonction de compression
+ * Le fichier source contient le code encodé
+ * Le fichier destination doit être vide, il contiendra le fichier decodé
  **/
 void move_to_front_decompression(FILE* fichier_lecture,
                                  FILE* fichier_ecriture) {
