@@ -8,7 +8,7 @@
 /**
  * @File compression_fonction.c
  * @Brief Fichier contenant les fonctions clés a la fonction de compression.
- **/ 
+*/ 
 
 
 /**
@@ -20,7 +20,7 @@
  * @Warning ce tableau sera modifié au cours du parcours move_to_front
  * Le fichier source contient le code à encoder
  * le fichier destination doit être vide, il contiendra le fichier encodé
- **/
+ */
 void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
   int symbole;
   uint8_t dictionnaire[TAILLE_TAB];
@@ -62,7 +62,7 @@ void move_to_front_compression(FILE* fichier_lecture, FILE* fichier_ecriture) {
 * Le fichier source contient le code à encoder
 * le fichier destination doit être vide, il contiendra le fichier encodé
 * le fichier destination contiendra une alternance de un octet a considerer comme un nombre et un octet à considerer comme un caractère ASCII
-**/
+*/
 void run_length_encoding(FILE* fichier_source, FILE* fichier_destination) {
   uint8_t occurence = 1;
   uint8_t courant;
@@ -112,7 +112,7 @@ void run_length_encoding(FILE* fichier_source, FILE* fichier_destination) {
  * incrémente frequences[caractère_lu] a chaque caractere lu.
  * ferme le fichier précedement ouvert.
  * @return le tableau frequences.
- */
+*/
 int* frequencies_of_occurences(char* file_name) {
   // raph
   FILE* fichier = NULL;
@@ -148,7 +148,7 @@ int* frequencies_of_occurences(char* file_name) {
  * frequencies_of_occurences. Construit et store dans une structure de donnée
  * (malloc) l'arbre de huffman résultat.
  * @Return l'arbre de huffman associé à la table de fréquence.
- **/
+*/
 huffman_tree* build_huffman_tree(int* frequencies) {
   int nbCara = 0;  // On initialise une variable qui va contenir le nombre de
                    // caractere a plus de 1 occurence
@@ -264,7 +264,7 @@ huffman_tree* build_huffman_tree(int* frequencies) {
  * build_huffman_tree) Construit l'arbre canonique correspondant. Alloue (malloc)
  * et store dans une structure canonical_tree l'abre canonique créé. 
  * @return le pointeur vers la racine de cet arbre canonique
-**/
+ */
 
 /*  ETAPES
 1- Parcourir l'arbre original pour construire un tableau avec tous les
@@ -354,7 +354,7 @@ canonical_tree* normal_tree_to_canonical_tree(huffman_tree* tree) {
  * Cette fonction fait appel à la fonction tree_to_length_table qui renvoie le
  * tableau des longueurs de code, puis écrit ce tableau dans le fichier
  * destination.
- **/
+*/
 void write_compressed_huffman_code(FILE* dst_file, canonical_tree* tree) {
   if (dst_file == NULL) {
     printf("Il y a eu une erreur lors de l'écriture du fichier compressé.\n");
@@ -375,7 +375,7 @@ void write_compressed_huffman_code(FILE* dst_file, canonical_tree* tree) {
  * fichier source dont on recupère le code compressé et sur lequel on appelle la
  * fonction traitement_caractere. Le dernier octet n'est pas forcément ecrit
  *dans le fichier alors on le rajoute
- **/
+*/
 void write_compressed_file(char* src_file_name, char* dst_file_name,
                            canonical_tree* tree) {
   FILE* src = fopen(src_file_name, "r");

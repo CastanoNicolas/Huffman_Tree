@@ -186,6 +186,11 @@ void tricroissant(int** tab, int tab_size) {
   }
 }
 
+
+/**
+* Fonction qui permet de créer un tableau de noeud
+* chaque noeud a le caractere et le poid des noeud de l'arbre de huffman
+**/
 noeud** tableau_noeud(int** tabCara, int nbCara) {
   int i;
   noeud** tabNoeud = malloc(nbCara * sizeof(noeud*));
@@ -203,6 +208,9 @@ noeud** tableau_noeud(int** tabCara, int nbCara) {
   return tabNoeud;
 }
 
+/**
+* Tri le tableau de noeud dans l'ordre croissant
+**/
 void tricroissantNoeud(noeud** tab, int tab_size) {
   int i = 0;
   noeud* tmp;
@@ -222,6 +230,9 @@ void tricroissantNoeud(noeud** tab, int tab_size) {
   }
 }
 
+/**
+* affiche l'arbre passé en parametre de la racine jusquau feuille avec le niveau et le caractere correspondant
+**/
 void afficher_arbre(noeud* tete, int niveau) {
   int i;
   fflush(stdin);

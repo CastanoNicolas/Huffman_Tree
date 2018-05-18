@@ -6,10 +6,11 @@
 #include "huffman.h"
 #include "utilitaire_decompression.h"
 #define ASCII 255
+
 /**
  * @File decompression_fonction.c
  * @Brief contient les fonctions liée a la decompression.
- **/
+*/
 
 
 uint8_t* read_compressed_huffman_code(FILE* f, uint8_t* nb_bit_invalide) {
@@ -25,7 +26,7 @@ uint8_t* read_compressed_huffman_code(FILE* f, uint8_t* nb_bit_invalide) {
 /**
  * Construit l'arbre canonique a partir a partir d'un tableau constructif
  * i.e. un tableau avec les caracteres de l'arbre et leur longueur de code
-**/
+*/
 canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab,
                                                int taille) {
   canonical_tree* can_tree = malloc(sizeof(noeud));  // malloc la racine
@@ -100,7 +101,7 @@ canonical_tree* length_table_to_canonical_tree(tableau_constructif* tab,
  * dans le fichier ouvert en écriture nommé par le param dst_file_name. 
  * A la fin le fichier destination contient le fichier d'entrée entierement decodé.
  * Le parametre nb_bit_invalide indique combien de bit ne sont pas a considerer dans le dernier octet.
-**/
+*/
 void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name,
                                     canonical_tree* tree, int nb_bit_invalide) {
   // ouverture des fichiers
@@ -196,7 +197,7 @@ void read_and_store_compressed_file(FILE* fsrc, char* dst_file_name,
 * le fichier destination contiendra une alternance de un octet a considerer comme un nombre et un octet à considerer comme un caractère ASCII
 * Le fichier source contient le code encodé
 * Le fichier destination doit être vide, il contiendra le fichier decodé
-**/
+*/
 void run_length_decoding(FILE* fichier_source, FILE* fichier_destination) {
   uint8_t prec, courant;
 

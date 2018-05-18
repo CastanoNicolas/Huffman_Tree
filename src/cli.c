@@ -2,17 +2,22 @@
 #include <stdlib.h>
 
 /**
-	*Fonction qui va permettre de gérer le lancement du programme
-	* L'utilisateur peut rentrer différentes options pour effectuer
-	* le nom du fichier_entree
-	* -c pour compresser le fichier_entree
-	* -d pour decompresser 
-	* -o suivi du nom du fichier destination
-	* -p pour activer le pretraitement
-	* les options peuvent être entrée dans n'importe quel ordre
-	* Il faut au moins une option (-c ou -d), les 2 en même temps sont possibles
-	* -o et le nom de destination sont obligatoire
-**/
+ * @File cli.c
+ * @Brief contient les fonctions liée a la fonction main.
+*/
+
+/**
+	*Fonction qui va permettre de gérer le lancement du programme <BR>
+	* L'utilisateur peut rentrer différentes options <BR>
+	* le nom du fichier_entree <BR> 
+	* -c pour compresser le fichier_entree <BR>
+	* -d pour decompresser <BR>
+	* -o suivi du nom du fichier destination <BR>
+	* -p pour activer le pretraitement <BR>
+	* les options peuvent être entrée dans n'importe quel ordre <BR>
+	* Il faut au moins une option (-c ou -d), les 2 en même temps sont possibles <BR>
+	* -o et le nom de destination sont obligatoire <BR>
+*/
 
 int shell(FILE** fichier_entree,char* input, int* source,int argc, char const *argv[], int *c, int *d, int* p,int* nbParam,char output[]){
 	
@@ -89,7 +94,9 @@ int shell(FILE** fichier_entree,char* input, int* source,int argc, char const *a
 	return erreur;
 }
 
-
+/**
+	*Fonction qui affiche les différents problèmes possibles si l'utilisateur execute mal le programme
+*/
 void affichage_erreur(int erreur){
 
 	switch(erreur){
