@@ -244,16 +244,15 @@ huffman_tree* build_huffman_tree(int* frequencies) {
 //  -- Il faut préalablement creer la structure de donnée canonical_tree
 /**
  * Prend un arbre de Huffman en entrée (donné par la fonction
- *build_huffman_tree) Construit l'arbre canonique correspondant. Alloue (malloc)
- *et store dans une structure canonical_tree l'abre canonique créé retourne cet
- *arbre canonique
- **/
+ * build_huffman_tree) Construit l'arbre canonique correspondant. Alloue (malloc)
+ * et store dans une structure canonical_tree l'abre canonique créé. 
+ * @return le pointeur vers la racine de cet arbre canonique
+**/
 
 /*  ETAPES
 1- Parcourir l'arbre original pour construire un tableau avec tous les
 caracteres et leur longueur 2- Trier le tableau dans l'ordre alphabetique pour
 chaque niveau 3- Construire l'arbre de Huffman a partir de ce tableau
-
 */
 canonical_tree* normal_tree_to_canonical_tree(huffman_tree* tree) {
   if (tree == NULL) return NULL;

@@ -228,6 +228,10 @@ void afficher_arbre(noeud* tete, int niveau) {
 
 /* Ergi */
 
+/**
+ * Construit un tableau constructif i.e. un tableau de caracteres avec leur 
+ * longueur de code a partir d'un arbre de Huffman 
+**/
 void construction_par_niveau(huffman_tree* tree, int level, int longueur,
  int* p_indice, tableau_constructif* tab) {
   if (tree == NULL) return;
@@ -248,6 +252,10 @@ void construction_par_niveau(huffman_tree* tree, int level, int longueur,
   }
 }
 
+/**
+ * Tri le tableau constructif d'abord par longueur corissante des codes et puis pour
+ * chaque segment de longeur, par ordre alphabetique des caracteres
+**/
 void tri_tableau(tableau_constructif* tab, int nbf) {
   int indice_car_min;
   int temp;
